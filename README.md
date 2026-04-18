@@ -15,7 +15,7 @@
 ### 🗂️ Conteúdo do repositório
 
 Basicamente um dump de tudo que estou praticando:
-experimentos, exercícios, desafios e bugs que eventualmente viram código funcionando.
+experimentos, exercícios, desafios e bugs que eventualmente viram alguma coisa, ou não também qm sabe 🐷.
 
 ---
 
