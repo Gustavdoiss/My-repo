@@ -1,19 +1,17 @@
-let inicio, fim, passos, contar, res;
-inicio = document.getElementById('inicio');
-fim = document.getElementById('fim');
-passos = document.getElementById('passos');
-contar = document.getElementById('count');
-res = document.getElementById('res');
+let num, button, cont = 1, res = [];
+num = document.getElementById('tabNum');
+button = document.getElementById('doTable');
+res = document.querySelectorAll('li');
 
-contar.addEventListener('click', function() {
-    let start = Number(inicio.value);
-    let finish = Number(fim.value);
-    let pace = Number(passos.value);
-    let resposta = `${start} `;
-
-    for (let i = (start+pace); i <= finish; (i += pace)) {
-        resposta += ` 👉 ${i}`;
+button.addEventListener('click', function() {
+    num = Number(num.value);
+    if (num == null) {
+        window.alert(`Por favor, digite um valor válido!!`);
+    }else {
+        for (let i = 0; i < res.length; i++) {
+        res[i].innerHTML = `${num} x ${cont} = ${cont*num}`;
+        cont++;
+        }
     }
 
-    res.innerHTML = resposta + ` 🏁`;
 })
