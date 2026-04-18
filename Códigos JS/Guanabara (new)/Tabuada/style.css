@@ -34,6 +34,9 @@ header {
 button {
     margin-bottom: 12px;
 }
+.res {
+    list-style: none;
+}
 footer {
     margin: 10px;
 }
