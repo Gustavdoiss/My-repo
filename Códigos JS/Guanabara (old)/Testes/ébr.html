@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eh BR eh?</title>
+</head>
+<body>
+    <h1>Testando se vc é BR mesmo</h1>
+    Insira sua nacionalidade: <input type="text" name="txtpa" id="txtpa">
+    <input type="button" value="Verificar" onclick="verificar()">
+    <div id="res">
+
+    </div>
+
+    <script>
+        function verificar() {
+            var txtp = document.querySelector('#txtpa')
+            var res = document.querySelector('#res')
+            var país = txtp.value
+
+            if (país == 'Brasil') {
+                res.innerHTML = `<p>Que legal!<br>Você é <strong>brasileiro!</strong></p>`
+            } else {
+                res.innerHTML = `<p>Putz, tu é de <strong>${país}</strong><br>É <strong>gringo</strong>.</p>`
+            }
+
+        }
+    </script>
+    
+</body>
+</html>

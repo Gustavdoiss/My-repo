@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Fez</title>
+    <style>
+        body {
+            background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJkRBOgkfsPgUaBbPupL2qsS3i6TUAMVA1QQ&s);
+            font: normal 20pt serif;
+        }
+        h1.Título {
+            background-color: seagreen;
+        }
+        div.Subtítulo {
+            background-color: seagreen;
+            font-size: larger;
+        }
+        select {
+            font: normal 18pt Arial;
+            margin-top: 15px;
+        }
+        div#botão {
+            font: normal 18pt Arial;
+        }
+        div#Resultado {
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="Título">Ultra calculador de notas INSANO proibido Winter Arc</h1>
+    <div class="Subtítulo">Escolha sua Etapa/Matéria logo abaixo!</div>
+    <select id="Etapas">
+        <option value="1ª Etapa">1ª Etapa</option>
+        <option value="2ª Etapa">2ª Etapa</option>
+        <option value="3ª Etapa">3ª Etapa</option>
+        <option value="4ª Etapa">4ª Etapa</option>
+    </select>
+
+    <select id="Matérias">
+        <optgroup class="mat">
+            <option>Matemática 1</option>
+            <option>Matemática 2</option>
+            <option>Matemática 3</option>
+        </optgroup>
+        <optgroup class="fis">
+            <option>Física 1</option>
+            <option>Física 2</option>
+        </optgroup>
+        <optgroup class="qui">
+            <option>Química 1</option>
+            <option>Química 2</option>
+        </optgroup>
+        <optgroup class="bio">
+            <option>Biologia 1</option>
+            <option>Biologia 2</option>
+        </optgroup>
+    </select>
+    <div id="AP"><u><strong>AP</strong></u></div>
+    <input type="number" name="media 1" id="m1">
+    <div id="TD"><u><strong>TD</strong></u></div>
+    <input type="number" name="media 2" id="m2">
+    <div id="AG"><u><strong>AG</strong></u></div>
+    <input type="number" name="media 3" id="m3">
+    <br>
+    <input type="button" value="Média da Etapa" id="botão" onclick="media4()">
+    <div id="Resultado">...</div>
+
+    <script>
+        function media4() {
+            // Seleciona os elementos corretamente
+            const etapas = document.querySelector('#Etapas');
+            const materias = document.querySelector('#Matérias');
+            const apInput = document.querySelector('#m1');
+            const tdInput = document.querySelector('#m2');
+            const agInput = document.querySelector('#m3');
+            const resultadoDiv = document.querySelector('#Resultado');
+
+            // Obtém os valores inseridos pelo usuário
+            const AP = Number(apInput.value);
+            const TD = Number(tdInput.value);
+            const AG = Number(agInput.value);
+
+            // Obtém a etapa selecionada
+            const etapaSelecionada = etapas.value;
+
+            // Calcula a média com base na etapa
+            let media;
+            if (etapaSelecionada === "4ª Etapa") {
+                media = (AP * 2 + TD + AG * 3) / 6;
+            } else {
+                media = (AP + TD + AG * 2) / 4;
+            }
+
+            // Exibe o resultado formatado
+            resultadoDiv.innerHTML = `<strong>Média</strong> -> <u>${media.toFixed(2)}</u>.`;
+        }
+    </script>
+</body>
+</html>

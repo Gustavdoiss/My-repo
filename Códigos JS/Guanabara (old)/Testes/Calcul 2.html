@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Calculus</title>
+    <style>
+        body {
+            background-image: url(https://www.futuroprossimo.it/wp-content/uploads/2023/05/Melancia_Tommy_Shelby_from_peaky.jpg);
+            font: normal 20pt serif;
+        }
+        h1.Título {
+            background-color: seagreen;
+        }
+        div.Subtítulo {
+            background-color: seagreen;
+            font-size: larger;
+        }
+        select {
+            font: normal 18pt Arial;
+            margin-top: 15px;
+        }
+        div#botão {
+            font: normal 18pt Arial;
+        }
+        div#Resultado {
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="Título">Ultra calculador de notas INSANO proibido Winter Arc</h1>
+    <div class="Subtítulo">Escolha sua Etapa/Matéria logo abaixo!</div>
+
+    <!--Opções de Etapas-->
+    <select id="Etapas">
+        <option value="1ª Etapa">1ª Etapa</option>
+        <option value="2ª Etapa">2ª Etapa</option>
+        <option value="3ª Etapa">3ª Etapa</option>
+        <option value="4ª Etapa">4ª Etapa</option>
+    </select>
+
+    <!--Opções de matérias--> 
+    <select id="Matérias">
+        <option value="Linguagens">Linguagens</option>
+        <option value="Inglês">Inglês</option>
+        <option value="Matemática">Matemática</option>
+        <option value="Física">Física</option>
+        <option value="Química">Química</option>
+        <option value="Biologia">Biologia</option>
+        <option value="Geografia">Geografia</option>
+        <option value="História">História</option>
+        <option value="Sociologia">Sociologia</option>
+        <option value="Filosofia">Filosofia</option>
+    </select>
+
+    <!--DIVs para as provas-->
+    <div id="1etapa"><u><strong>1ª Etapa</strong></u></div>
+    <input type="number" name="media 1" id="m1">
+    <div id="2etapa"><u><strong>2ª Etapa</strong></u></div>
+    <input type="number" name="media 2" id="m2">
+    <div id="3etapa"><u><strong>3ª Etapa</strong></u></div>
+    <input type="number" name="media 3" id="m3">
+    <div id="4etapa"><u><strong>4ª Etapa</strong></u></div>
+    <input type="number" name="media 4" id="m4">
+    <br>
+    <input type="button" value="Passou?" id="botão" onclick="media4()">
+    <div id="Resultado">...</div>
+
+    <script>
+        //Função que vai realizar todas as ações
+        function media4() {
+            
+            //Identifica e colhe o valor da Etapa/Matéria
+            let et = document.querySelector('#Etapas')
+            let etapas = et.value
+            let mat = document.querySelector('#Matérias')
+            let materias = mat.value
+
+            //Armazena as notas colocadas
+            let e1 = document.querySelector('input#m1')//1ª Etapa
+            let e2 = document.querySelector('input#m2')//2ª Etapa
+            let e3 = document.querySelector('input#m3')//3ª Etapa
+            let e4 = document.querySelector('input#m4')//4ª Etapa
+
+            //Mostra o resultado final
+            let res = document.querySelector('div#Resultado')
+
+            //Recolhe os valores das notas
+            var ET1 = Number(e1.value)
+            var ET2 = Number(e2.value)
+            var ET3 = Number(e3.value)
+            var ET4 = Number(e4.value)
+
+            //Calcula a media do ano
+            const media = (ET1 + ET2 + ET3 + 2*ET4)/5
+            let faltou = null
+
+            if(media >= 6.66) {
+                res.innerHTML = `Parabéns!!!<br>Você <strong><u>PASSOU!!!</u></strong>`
+
+            }   else {
+                faltou = (6.66 - media).toFixed(2)
+                res.innerHTML = `Que pena.<br>Você <strong><u>NÃO</u></strong> passou por ${faltou}pontos.`
+            }
+
+           
+        }
+        
+    </script>
+</body>
+</html>

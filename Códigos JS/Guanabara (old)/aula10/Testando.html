@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fórmula de Bháskara</title>
+    <style>
+        body {
+            font: normal 20pt Arial;
+        }
+        input {
+            font: normal 20pt Arial;
+            width: 100px;
+        }
+        div#Resultado {
+            margin-top: 22px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fazedor de Bháskara 2000 Ultra Gamer Atualizado 10923 a.C</h1>
+    <div id="a">a</div>
+    <input type="number" name="txtn1" id="txtn1">
+    <div id="b">b</div>
+    <input type="number" name="txtn2" id="txtn2">
+    <div id="c">c</div>
+    <input type="number" name="txtn3" id="txtn3">
+    <input type="button" value="Delta" onclick="delta()">
+    <div id="Resultado">Resultado:</div>
+    <script>
+        function delta() {
+            let tn1 = document.getElementById('txtn1')
+            let tn2 = document.querySelector('input#txtn2')
+            let tn3 = document.getElementById('txtn3')
+            var res = document.querySelector('div#Resultado')
+            var a = Number(tn1.value)
+            var b = Number(tn2.value)
+            var c = Number(tn3.value)
+            var d = b*2 - 4*a*c
+            var x1 = (-b + d*1/2)/2*a
+            var x2 = (-b - d*1/2)/2*a
+            res.innerHTML = `<strong>Equação</strong> -> (${a})x² + (${b})x + (${c}) |
+            <strong>Delta</strong> -> ${d} |
+            <strong>x'</strong> -> ${x1} |
+            <strong>x"</strong> -> ${x2}.`
+        }
+    </script>
+    
+</body>
+</html>

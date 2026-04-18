@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcula médias</title>
+    <style>
+        body {
+            background-color: rgb(135, 228, 235);
+            font: normal 20pt serif;
+        }
+        select#Etapas {
+            font: normal 15pt Arial;
+        }
+        select#Matérias {
+            font: normal 15pt Arial;
+        }
+        input {
+            font: normal 15pt Arial;
+        }
+        input#botão {
+            margin-top: 10px;
+        }
+        div#AP {
+            margin-top: 20px;
+        }
+        div#TD {
+            margin-top: 10px;
+        }
+        div#AG {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculando suas notas!</h1>
+    <div></div>
+    <select id="Etapas">
+        <option id="1_Etapa">1ª Etapa</option>
+        <option id="2_Etapa">2ª Etapa</option>
+        <option id="3_Etapa">3ª Etapa</option>
+        <option id="4_Etapa">4ª Etapa</option>
+    </select>
+    <select id="Matérias">
+        <optgroup id="Matemática">
+            <option id="Matemática 1">Matemática 1</option>
+            <option id="Matemática 2">Matemática 2</option>
+            <option id="Matemática 3">Matemática 3</option>
+        </optgroup>
+        <optgroup id="Física">
+            <option id="Física 1">Física 1</option>
+            <option id="Física 2">Física 2</option>
+        </optgroup>
+        <optgroup id="Biologia">
+            <option id="Bio 1">Biologia 1</option>
+            <option id="Bio 2">Biologia 2</option>
+        </optgroup>
+        <optgroup id="Química">
+            <option id="Química 1">Química 1</option>
+            <option id="Química 2">Química 2</option>
+        </optgroup>
+    </select>
+    <div id="AP"><u><strong>AP</strong></u></div>
+    <input type="number" name="media 1" id="m1">
+    <div id="TD"><u><strong>TD</strong></u></div>
+    <input type="number" name="media 2" id="m2">
+    <div id="AG"><u><strong>AG</strong></u></div>
+    <input type="number" name="media 3" id="m3">
+    <br>
+    <input type="button" value="Média da Etapa" id="botão" onclick="media4()">
+    <div id="Resultado">...</div>
+
+    <script>
+        function media4() {
+            var Et4 = document.querySelector('select#Etapas option#4_Etapa')
+            let Etapas = Et.options[Et.selectedIndex].id
+            var Materias = document.querySelector('select#Matérias')
+            let a4 = document.querySelector('input#m1')
+            let t4 = document.querySelector('input#m2')
+            let u4 = document.querySelector('input#m3')
+            let res4 = document.querySelector('div#Resultado')
+            var AP4 = Number(a4.value)
+            var TD4 = Number(t4.value)
+            var AG4 = Number(u4.value)
+            var m4 = (AP4*2 + TD4 + AG4*3)/6
+            res4.innerHTML = `<strong>Média</strong> -> <u>${m4}</u>.`
+        }
+    </script>
+    
+</body>
+</html>
