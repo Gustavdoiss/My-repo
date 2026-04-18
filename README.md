@@ -19,4 +19,4 @@ experimentos, exercícios, desafios e bugs que eventualmente viram alguma coisa,
 
 ---
 
-> *"Nada sério por aqui, só rascunhos de estudo 😜."*
+> *"😜"*
