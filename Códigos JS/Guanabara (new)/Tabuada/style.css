@@ -1,0 +1,42 @@
+body {
+    background-color: cornflowerblue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+header {
+    font-size: xx-large;
+    margin: 15px;
+}
+.main {
+    background-color: aliceblue;
+    border-radius: 10px;
+    padding: 15px;
+    width: 300px;
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 0.342) 5px 5px 10px;
+    text-align: center;
+}
+.destaque {
+    height: 100px;
+    overflow-y: scroll;
+    box-shadow: rgba(0, 0, 0, 0.342) 5px 5px 10px;
+    border-color: blanchedalmond;
+    border-style: solid;
+    border-width: 2px;
+}
+.table_number {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 8px;
+}
+button {
+    margin-bottom: 12px;
+}
+.res {
+    list-style: none;
+}
+footer {
+    margin: 10px;
+}

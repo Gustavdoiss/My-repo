@@ -15,5 +15,5 @@ contar.addEventListener('click', function() {
         resposta += ` 👉 ${i}`;
     }
 
-    res.innerHTML = resposta + `🏁`;
+    res.innerHTML = resposta + ` 🏁`;
 })
