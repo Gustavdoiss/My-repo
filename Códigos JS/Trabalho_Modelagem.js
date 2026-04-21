@@ -21,7 +21,11 @@ function newtonRaphson(t0) {
         
         if (Math.abs(tNovo - t) < 0.0000001) break
         t = tNovo
-    }
+    } /*Como o método só acha raízes e quero achar "v(t) = N", preciso criar uma função para "0 = v(t) - N".
+        Essa função é a ft, e a sua derivada é a dft. O método de Newton-Raphson é iterativo, 
+        então ele vai se aproximando cada vez mais da raiz, 
+        e quando a diferença entre as aproximações for menor que um valor muito pequeno (0.0000001), 
+        ele para e retorna o valor encontrado.*/
     return t
 }
 
