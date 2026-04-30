@@ -1,0 +1,20 @@
+# ninja log v7
+16	265	7991427717112825	CMakeFiles/main.dir/BEE_1020.c.obj	62e835168bd8ffaa
+267	1769	7991918808474570	CMakeFiles/main.dir/BEE_1172.c.obj	f38114828016e9b1
+38	319	7991427717333446	CMakeFiles/main.dir/BEE_1028.c.obj	21d690a5bf0f047b
+82	355	7991427717772773	CMakeFiles/main.dir/teste.c.obj	d38aec1fa1ec205b
+495	1802	7991918810755183	CMakeFiles/main.dir/BEE_1173.c.obj	4d59d22855cd0297
+5	363	7992729531208102	build.ninja	e5676984fefd4336
+5	363	7992729531049071	C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug/cmake_install.cmake	e5676984fefd4336
+61	421	7992200077685121	CMakeFiles/main.dir/BEE_1042.c.obj	68b7316dc0e9697a
+902	1870	7991918814832308	CMakeFiles/main.dir/BEE_1174.c.obj	f20293723561ae6c
+1375	1913	7991918819566173	CMakeFiles/main.dir/BEE_1175.c.obj	3cb22386c9e85e79
+1540	2026	7991918821199187	CMakeFiles/main.dir/BEE_1176.c.obj	76503c03b911e1ed
+74	430	7992200077815040	CMakeFiles/main.dir/BEE_1043.c.obj	a10c07bb3eb0ecc5
+85	435	7992200077925028	CMakeFiles/main.dir/BEE_1044.c.obj	acd0dfececb68665
+98	447	7992200078045046	CMakeFiles/main.dir/BEE_1045.c.obj	5d89f9433c67851a
+122	456	7992200078295093	CMakeFiles/main.dir/BEE_1046.c.obj	102ec25bf6fac413
+163	461	7992200078701666	CMakeFiles/main.dir/BEE_1047(otimizado).c.obj	bdcee91ff0c727aa
+191	479	7992200078981658	CMakeFiles/main.dir/BEE_1047.c.obj	36c12464365e3fa7
+230	506	7992200079365641	CMakeFiles/main.dir/BEE_1048.c.obj	ace022e2fd7d70a
+283	548	7992200079903438	CMakeFiles/main.dir/BEE_1050.c.obj	e6d078fa1b9022aa
