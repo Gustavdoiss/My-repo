@@ -10,6 +10,10 @@ function mediaUp(x) {
     return ((cont/x.length)*100);
 }
 
+function arredondar(numero, casas) {
+  return Number(Math.round(numero + 'e+' + casas) + 'e-' + casas);
+}
+
 let c, n;
 c = parseInt(prompt(''));
 
@@ -22,6 +26,6 @@ for (let i = 0; i< c; i++) {
         soma += temp[l];
         if (l == (n-1)) media = soma/n;
     }
-    let aaa =(mediaUp(temp)).toFixed(3)
-    console.log(aaa);
+    let aaa = arredondar(mediaUp(temp), 3)
+    console.log(`${aaa}%\n`);
 }
