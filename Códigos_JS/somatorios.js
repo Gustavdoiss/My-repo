@@ -1,5 +1,11 @@
 const prompt = require('prompt-sync')();
 
+function fatorial(num) {
+    if (num <= 0) return 1;
+    else return num * fatorial(num-1);
+}
+
+
 let soma1 = 0, soma2 = 0, soma3 = 0, n;
 
 console.log(`Informe o número de termos para somar:`);
@@ -21,3 +27,5 @@ for (let i = 1; i <= n; i++) {
 }
 console.log(soma2);
 
+//Somatório 3
+console.log(fatorial(5));
