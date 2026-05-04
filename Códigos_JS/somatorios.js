@@ -9,12 +9,12 @@ function fatorial(num) {
 let soma1 = 0, soma2 = 0, soma3 = 0, n;
 
 console.log(`Informe o número de termos para somar:`);
-n = 3;
+n = parseInt(prompt('> '));
 
 //Somatório 1
 let term1 = 1;
 for (let i = 1; i <= n; i++) {
-    soma1 = soma1 + term1;
+    soma1 += term1;
     term1 = term1 + 2;
 }
 console.log(soma1);
@@ -35,3 +35,4 @@ for (let i = 1; i <= n; i++) {
     temp = 1/(fatorial(Math.abs(term3))) * Math.pow(-1, i);
 }
 console.log(soma3);
+
