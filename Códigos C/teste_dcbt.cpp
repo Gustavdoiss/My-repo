@@ -123,7 +123,6 @@ void setup() {
 
   // Página raiz (cativa)
   server.on("/", HTTP_GET, [myIP](AsyncWebServerRequest *request) {
-    awake = true;
     String ipStr = myIP.toString();
     String html = R"rawliteral(
 <!DOCTYPE html>
@@ -345,6 +344,13 @@ void setup() {
         request->send(200, "text/plain", "Calibrado com sucesso!");
     }else {
         request->send(400, "text/plain", "Parâmetro ausente");
+    }
+  });
+
+  //Acordar e dormir
+  server.on("/acordar", HTTP_GET, [](AsyncWebServerRequest *request) {
+    if (request->hasParam("sitaucao")) {
+      
     }
   });
 
