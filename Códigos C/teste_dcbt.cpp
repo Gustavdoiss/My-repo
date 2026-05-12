@@ -41,15 +41,15 @@
 #include <WEMOS_Matrix_GFX.h>   // tested on 1.4.0iu332
 #define buzzer D8
 
-MLED matrix(7); // intensidade 7 (máximo)
+MLED matrix(7);
 
 int slowSpeed = 40; //number between 1 and 180 max.
 int fastSpeed = 60; //number between 1 and 180 max.
-//To vcalibrate motors: Positive mnumbers give more right movement
+
 int calibration = 0; //number between -50 and 50 to balance motors
 
-int lpos = 1; // posição olho esquerdo
-int rpos = 6; // posição olho direito
+int lpos = 1;
+int rpos = 6; 
 int aleat = 5;
 
 bool awake = false;
@@ -59,7 +59,7 @@ const char *password = "";
 Servo servo0;
 Servo servo6;
 
-//sounds
+
 const int decabotMusic[4][3]{ { 494, 2, 3 }, { 554, 2, 4 }, { 440, 2, 5 }, { 880, 1, 6 } };
 static const uint8_t PROGMEM decabotLogo[4][5] = {{0b11001110,0b10101000,0b10101100,0b10101000,0b11001110},{0b00110010,0b01000101,0b01000111,0b01000101,0b00110101},{0b11000100,0b10101010,0b11001010,0b10101010,0b11000100},{0b01110100,0b00100100,0b00100100,0b00100000,0b00100100}};
 
@@ -76,25 +76,24 @@ void notFound(AsyncWebServerRequest *request) {
   request->redirect("/");
 }
 
-void motorLeft(int pot){
-  //run motor on power -100 to 100
-  if(pot ==0){
-    servo0.write(90);
+int neutralLeft  = 93;
+int neutralRight = 93;
+
+void motorLeft(int pot) {
+  if (pot == 0) {
+    servo0.write(neutralLeft);
   } else {
-    int vel = 90 + map(pot,-100,100,fastSpeed-calibration,-fastSpeed-calibration);
+    int vel = neutralLeft + map(pot, -100, 100, fastSpeed, -fastSpeed);
     servo0.write(vel);
-    Serial.print("L" + (String)vel + " ");
   }
 }
 
-void motorRight(int pot){
-  //run motor on power -100 to 100
-  if(pot == 0){
-    servo6.write(90);
+void motorRight(int pot) {
+  if (pot == 0) {
+    servo6.write(neutralRight);
   } else {
-    int vel = 90 - map(pot,-100,100,fastSpeed+calibration,-fastSpeed+calibration);
+    int vel = neutralRight - map(pot, -100, 100, fastSpeed, -fastSpeed);
     servo6.write(vel);
-    Serial.println("R" + (String)vel);
   }
 }
 
@@ -170,6 +169,12 @@ void setup() {
       gap: 14px;
       touch-action: none; /* evita scroll durante o toque */
     }
+    .controle.dormindo button:not(.state1):not(.state2) {
+      background: #2a2a2a;
+      border-color: #444444;
+      color: #888888;
+      transition: background .3s, border-color .3s, color .3s;
+    }
     button {
       background: var(--btn);
       color: var(--txt);
@@ -188,6 +193,8 @@ void setup() {
     /* posição dos botões */
     .frente  { grid-column: 2; grid-row: 1; }
     .esquerda{ grid-column: 1; grid-row: 2; }
+    .state1  { grid-column: 2; grid-row: 2; }
+    .state2  { grid-column: 2; grid-row: 2; }
     .direita { grid-column: 3; grid-row: 2; }
     .tras    { grid-column: 2; grid-row: 3; }
 
@@ -213,6 +220,8 @@ void setup() {
     <button class="esquerda" aria-label="Esquerda" onpointerdown="press('Left')"  onpointerup="release()" onpointerleave="release()">◄</button>
     <button class="direita"  aria-label="Direita"  onpointerdown="press('Right')" onpointerup="release()" onpointerleave="release()">►</button>
     <button class="tras"     aria-label="Trás"     onpointerdown="press('Back')"  onpointerup="release()" onpointerleave="release()">▼</button>
+    <button class="state1"    aria-label="Estado"   onclick="acordar('levanta')">🌜</button>
+    <button class="state2"    aria-label="Estado"   onclick="acordar('apaga')">🌞</button>
   </div>
 
   <div class="calibrador">
@@ -226,6 +235,12 @@ void setup() {
 
   <script>
     let isPressed = false;
+    let acordado = false;
+    const controle = document.querySelector('.controle');
+    const botaoDormindo = document.querySelector('.state1');
+    const botaoAcordado = document.querySelector('.state2');
+    botaoAcordado.style.visibility = "hidden";
+    controle.classList.add('dormindo');
 
     function changeCVT(value) {
       const textCalib = document.getElementById('valorCalib');
@@ -257,6 +272,24 @@ void setup() {
       if (!isPressed) return;
       isPressed = false;
       setLED('Stop'); // volta para neutro ao SOLTAR
+    }
+
+    function acordar(estado) {
+      if (!acordado) {
+        acordado = true;
+        botaoAcordado.style.visibility = "visible";
+        botaoDormindo.style.visibility = "hidden";
+        controle.classList.remove('dormindo');
+        return fetch('/acordar?situacao=' + estado)
+        .catch(() => {});
+      }else {
+        acordado = false;
+        botaoAcordado.style.visibility = "hidden";
+        botaoDormindo.style.visibility = "visible";
+        controle.classList.add('dormindo');
+        return fetch('/acordar?situacao=' + estado)
+        .catch(() => {});
+      }
     }
 
     function getLEDStatus() {
@@ -346,14 +379,23 @@ void setup() {
         request->send(400, "text/plain", "Parâmetro ausente");
     }
   });
-
+  
   //Acordar e dormir
   server.on("/acordar", HTTP_GET, [](AsyncWebServerRequest *request) {
-    if (request->hasParam("sitaucao")) {
-      
+    if (request->hasParam("situacao")) {
+        String situString = request->getParam("situacao")->value();
+        if(situString == "levanta"){
+          awake = true;
+          request->send(200, "text/plain", "Decabot acordado!");
+        } else if(situString == "apaga"){
+          awake = false;
+          request->send(200, "text/plain", "Decabot dormindo!");
+        } else {
+          request->send(400, "text/plain", "Valor inválido");
+        }
     }
   });
-
+  
   server.begin();
   for (int i = 0; i < 4; i++) {
     matrix.clear();
