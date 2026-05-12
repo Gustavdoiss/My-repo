@@ -79,6 +79,30 @@
 },
 {
   "directory": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug",
+  "command": "C:\\Users\\gusta\\AppData\\Local\\Programs\\CLion\\bin\\mingw\\bin\\gcc.exe -g -fdiagnostics-color=always -o CMakeFiles\\main.dir\\BEE_1117.c.obj -c \"C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\My-repo\\Códigos C\\BEE_1117.c\"",
+  "file": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/BEE_1117.c",
+  "output": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug/CMakeFiles/main.dir/BEE_1117.c.obj"
+},
+{
+  "directory": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug",
+  "command": "C:\\Users\\gusta\\AppData\\Local\\Programs\\CLion\\bin\\mingw\\bin\\gcc.exe -g -fdiagnostics-color=always -o CMakeFiles\\main.dir\\BEE_1131.c.obj -c \"C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\My-repo\\Códigos C\\BEE_1131.c\"",
+  "file": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/BEE_1131.c",
+  "output": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug/CMakeFiles/main.dir/BEE_1131.c.obj"
+},
+{
+  "directory": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug",
+  "command": "C:\\Users\\gusta\\AppData\\Local\\Programs\\CLion\\bin\\mingw\\bin\\gcc.exe -g -fdiagnostics-color=always -o CMakeFiles\\main.dir\\BEE_1132.c.obj -c \"C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\My-repo\\Códigos C\\BEE_1132.c\"",
+  "file": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/BEE_1132.c",
+  "output": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug/CMakeFiles/main.dir/BEE_1132.c.obj"
+},
+{
+  "directory": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug",
+  "command": "C:\\Users\\gusta\\AppData\\Local\\Programs\\CLion\\bin\\mingw\\bin\\gcc.exe -g -fdiagnostics-color=always -o CMakeFiles\\main.dir\\BEE_1133.c.obj -c \"C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\My-repo\\Códigos C\\BEE_1133.c\"",
+  "file": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/BEE_1133.c",
+  "output": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug/CMakeFiles/main.dir/BEE_1133.c.obj"
+},
+{
+  "directory": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug",
   "command": "C:\\Users\\gusta\\AppData\\Local\\Programs\\CLion\\bin\\mingw\\bin\\gcc.exe -g -fdiagnostics-color=always -o CMakeFiles\\main.dir\\BEE_1142.c.obj -c \"C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\My-repo\\Códigos C\\BEE_1142.c\"",
   "file": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/BEE_1142.c",
   "output": "C:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos C/cmake-build-debug/CMakeFiles/main.dir/BEE_1142.c.obj"
