@@ -21,7 +21,7 @@ header {
     height: 100px;
     overflow-y: scroll;
     box-shadow: rgba(0, 0, 0, 0.342) 5px 5px 10px;
-    border-color: blanchedalmond;
+    border-color: rgb(255, 235, 205);
     border-style: solid;
     border-width: 2px;
 }

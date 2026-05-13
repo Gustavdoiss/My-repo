@@ -54,6 +54,8 @@ int aleat = 5;
 
 bool awake = false;
 
+String serialAtual = "";
+
 const char *ssid = "MeuDecabot";
 const char *password = "";
 Servo servo0;
@@ -78,6 +80,10 @@ void notFound(AsyncWebServerRequest *request) {
 
 int neutralLeft  = 93;
 int neutralRight = 93;
+
+void printWeb(String texto) {
+  serialAtual = texto;
+}
 
 void motorLeft(int pot) {
   if (pot == 0) {
@@ -169,11 +175,12 @@ void setup() {
       gap: 14px;
       touch-action: none; /* evita scroll durante o toque */
     }
-    .controle.dormindo button:not(.state1):not(.state2) {
+    .controle.dormindo button:not(.state1):not(.state2):not(.dbButton) {
       background: #2a2a2a;
       border-color: #444444;
       color: #888888;
       transition: background .3s, border-color .3s, color .3s;
+      pointer-events: none;
     }
     button {
       background: var(--btn);
@@ -197,10 +204,22 @@ void setup() {
     .state2  { grid-column: 2; grid-row: 2; }
     .direita { grid-column: 3; grid-row: 2; }
     .tras    { grid-column: 2; grid-row: 3; }
+    .dbButton{ grid-column: 3; grid-row: 3; }
 
     .status{
       font-size:14px;
       opacity:.85;
+    }
+    .dbPanel{
+      background: var(--btn);
+      color: var(--txt);
+      border: 2px solid rgb(255, 235, 205);
+      overflow-y: scroll;
+      border-radius: 16px;
+      font-size: 16px;
+      box-shadow: rgba(0, 0, 0, 0.342) 5px 5px 10px;
+      width: 250px;
+      height: 200px;
     }
 
     @media (max-width: 420px){
@@ -220,8 +239,9 @@ void setup() {
     <button class="esquerda" aria-label="Esquerda" onpointerdown="press('Left')"  onpointerup="release()" onpointerleave="release()">◄</button>
     <button class="direita"  aria-label="Direita"  onpointerdown="press('Right')" onpointerup="release()" onpointerleave="release()">►</button>
     <button class="tras"     aria-label="Trás"     onpointerdown="press('Back')"  onpointerup="release()" onpointerleave="release()">▼</button>
-    <button class="state1"    aria-label="Estado"   onclick="acordar('levanta')">🌜</button>
-    <button class="state2"    aria-label="Estado"   onclick="acordar('apaga')">🌞</button>
+    <button class="state1"    aria-label="Estado"  onclick="acordar('levanta')">🌜</button>
+    <button class="state2"    aria-label="Estado"  onclick="acordar('apaga')">🌞</button>
+    <button class="dbButton"  aria-label="debugar" onclick="debugar()">DB</button>
   </div>
 
   <div class="calibrador">
@@ -232,13 +252,20 @@ void setup() {
 
   <div class="status">LED status: <strong id="ledState">unknown</strong></div>
   <a href="http://)rawliteral" + ipStr + R"rawliteral(/" style="color:#9bd">Abrir no navegador</a>
-
+  <div class="dbPanel">
+    <ul class="serials"></ul>
+  </div>
   <script>
+    let dbOn = false;
     let isPressed = false;
     let acordado = false;
+    let intervalo = null;
     const controle = document.querySelector('.controle');
     const botaoDormindo = document.querySelector('.state1');
     const botaoAcordado = document.querySelector('.state2');
+    const dbPanel = document.querySelector('.dbPanel');
+    const serials = document.querySelector('.serials');
+    dbPanel.style.visibility = "hidden";
     botaoAcordado.style.visibility = "hidden";
     controle.classList.add('dormindo');
 
@@ -292,6 +319,29 @@ void setup() {
       }
     }
 
+    function debugar() {
+      if (!dbOn) {
+        dbOn = true;
+        dbPanel.style.visibility = "visible";
+        intervalo = setInterval(() => {
+          fetch('/serial')
+          .then(r => r.text())
+          .then(text => {
+            if (text != "") {
+              const newItem = document.createElement('li');
+              newItem.innerHTML = `${text}`;
+              serials.appendChild(newItem);
+            }
+          })
+        }, 500);
+      }else {
+        dbOn = false;
+        dbPanel.style.visibility = "hidden";
+        clearInterval(intervalo);
+        intervalo = null;
+      }
+    }
+
     function getLEDStatus() {
       fetch('/status')
         .then(r => r.text())
@@ -314,10 +364,17 @@ void setup() {
     request->send(200, "text/html", html);
   });
 
+  // Prints no painel de Debug
+  server.on("/serial", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(200, "text/plain", serialAtual);
+    serialAtual = "";
+  });
+
   // Comandos: Front / Left / Right / Back / Stop
   server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request) {
     if (request->hasParam("state")) {
       String state = request->getParam("state")->value();
+      printWeb(state);
 
       if (state == "Front") {
         digitalWrite(LED_PIN, LOW);
@@ -370,15 +427,13 @@ void setup() {
     if (request->hasParam("val")) {
         String valorString = request->getParam("val")->value();
         calibration = valorString.toInt();
-
-        Serial.print("Nova calibracao: ");
-        Serial.println(calibration);
-
+        neutralLeft  = 90 + calibration;
+        neutralRight = 90 - calibration;
         request->send(200, "text/plain", "Calibrado com sucesso!");
-    }else {
+    } else {
         request->send(400, "text/plain", "Parâmetro ausente");
     }
-  });
+});
   
   //Acordar e dormir
   server.on("/acordar", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -459,6 +514,7 @@ void loop() {
       delay(15);
     }
   } else {
+    matrix.clear();
     matrix.drawLine(0, 7, 2, 7, LED_ON);
     matrix.drawLine(5, 7, 7, 7, LED_ON);
     matrix.writeDisplay();
