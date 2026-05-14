@@ -49,14 +49,6 @@ cmake_ninja_workdir = C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Código
 
 build cmake_object_order_depends_target_main: phony || .
 
-build CMakeFiles/main.dir/BEE_1020.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE$ 1020.c || cmake_object_order_depends_target_main
-  CONFIG = Debug
-  DEP_FILE = CMakeFiles\main.dir\BEE_1020.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\main.dir
-  OBJECT_FILE_DIR = CMakeFiles\main.dir
-  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
-
 build CMakeFiles/main.dir/BEE_1028.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1028.c || cmake_object_order_depends_target_main
   CONFIG = Debug
   DEP_FILE = CMakeFiles\main.dir\BEE_1028.c.obj.d
@@ -161,6 +153,14 @@ build CMakeFiles/main.dir/BEE_1117.c.obj: C_COMPILER__main_unscanned_Debug C$:/U
   OBJECT_FILE_DIR = CMakeFiles\main.dir
   TARGET_SUPPORT_DIR = CMakeFiles\main.dir
 
+build CMakeFiles/main.dir/BEE_1118.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1118.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1118.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
 build CMakeFiles/main.dir/BEE_1131.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1131.c || cmake_object_order_depends_target_main
   CONFIG = Debug
   DEP_FILE = CMakeFiles\main.dir\BEE_1131.c.obj.d
@@ -185,6 +185,14 @@ build CMakeFiles/main.dir/BEE_1133.c.obj: C_COMPILER__main_unscanned_Debug C$:/U
   OBJECT_FILE_DIR = CMakeFiles\main.dir
   TARGET_SUPPORT_DIR = CMakeFiles\main.dir
 
+build CMakeFiles/main.dir/BEE_1134.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1134.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1134.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
 build CMakeFiles/main.dir/BEE_1142.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1142.c || cmake_object_order_depends_target_main
   CONFIG = Debug
   DEP_FILE = CMakeFiles\main.dir\BEE_1142.c.obj.d
@@ -193,9 +201,105 @@ build CMakeFiles/main.dir/BEE_1142.c.obj: C_COMPILER__main_unscanned_Debug C$:/U
   OBJECT_FILE_DIR = CMakeFiles\main.dir
   TARGET_SUPPORT_DIR = CMakeFiles\main.dir
 
+build CMakeFiles/main.dir/BEE_1143.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1143.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1143.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1144.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1144.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1144.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1145.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1145.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1145.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1146.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1146.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1146.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1149.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1149.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1149.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1150.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1150.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1150.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
 build CMakeFiles/main.dir/BEE_1153.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1153.c || cmake_object_order_depends_target_main
   CONFIG = Debug
   DEP_FILE = CMakeFiles\main.dir\BEE_1153.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1154.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1154.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1154.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1155.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1155.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1155.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1156.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1156.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1156.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1157.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1157.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1157.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1158.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1158.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1158.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\main.dir
+  OBJECT_FILE_DIR = CMakeFiles\main.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\main.dir
+
+build CMakeFiles/main.dir/BEE_1159.c.obj: C_COMPILER__main_unscanned_Debug C$:/Users/gusta/OneDrive/Documentos/GitHub/My-repo/Códigos$ C/BEE_1159.c || cmake_object_order_depends_target_main
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\main.dir\BEE_1159.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\main.dir
   OBJECT_FILE_DIR = CMakeFiles\main.dir
@@ -305,7 +409,7 @@ build CMakeFiles/main.dir/teste.c.obj: C_COMPILER__main_unscanned_Debug C$:/User
 #############################################
 # Link the executable main.exe
 
-build main.exe: C_EXECUTABLE_LINKER__main_Debug CMakeFiles/main.dir/BEE_1020.c.obj CMakeFiles/main.dir/BEE_1028.c.obj CMakeFiles/main.dir/BEE_1042.c.obj CMakeFiles/main.dir/BEE_1043.c.obj CMakeFiles/main.dir/BEE_1044.c.obj CMakeFiles/main.dir/BEE_1045.c.obj CMakeFiles/main.dir/BEE_1046.c.obj CMakeFiles/main.dir/BEE_1047(otimizado).c.obj CMakeFiles/main.dir/BEE_1047.c.obj CMakeFiles/main.dir/BEE_1048.c.obj CMakeFiles/main.dir/BEE_1050.c.obj CMakeFiles/main.dir/BEE_1051.c.obj CMakeFiles/main.dir/BEE_1061.c.obj CMakeFiles/main.dir/BEE_1117.c.obj CMakeFiles/main.dir/BEE_1131.c.obj CMakeFiles/main.dir/BEE_1132.c.obj CMakeFiles/main.dir/BEE_1133.c.obj CMakeFiles/main.dir/BEE_1142.c.obj CMakeFiles/main.dir/BEE_1153.c.obj CMakeFiles/main.dir/BEE_1172.c.obj CMakeFiles/main.dir/BEE_1173.c.obj CMakeFiles/main.dir/BEE_1174.c.obj CMakeFiles/main.dir/BEE_1175.c.obj CMakeFiles/main.dir/BEE_1176.c.obj CMakeFiles/main.dir/BEE_1214.c.obj CMakeFiles/main.dir/BEE_1828(Bazinga!).c.obj CMakeFiles/main.dir/BEE_2670.c.obj CMakeFiles/main.dir/blachhole.c.obj CMakeFiles/main.dir/circularidade.c.obj CMakeFiles/main.dir/fibonacci.c.obj CMakeFiles/main.dir/teste.c.obj
+build main.exe: C_EXECUTABLE_LINKER__main_Debug CMakeFiles/main.dir/BEE_1028.c.obj CMakeFiles/main.dir/BEE_1042.c.obj CMakeFiles/main.dir/BEE_1043.c.obj CMakeFiles/main.dir/BEE_1044.c.obj CMakeFiles/main.dir/BEE_1045.c.obj CMakeFiles/main.dir/BEE_1046.c.obj CMakeFiles/main.dir/BEE_1047(otimizado).c.obj CMakeFiles/main.dir/BEE_1047.c.obj CMakeFiles/main.dir/BEE_1048.c.obj CMakeFiles/main.dir/BEE_1050.c.obj CMakeFiles/main.dir/BEE_1051.c.obj CMakeFiles/main.dir/BEE_1061.c.obj CMakeFiles/main.dir/BEE_1117.c.obj CMakeFiles/main.dir/BEE_1118.c.obj CMakeFiles/main.dir/BEE_1131.c.obj CMakeFiles/main.dir/BEE_1132.c.obj CMakeFiles/main.dir/BEE_1133.c.obj CMakeFiles/main.dir/BEE_1134.c.obj CMakeFiles/main.dir/BEE_1142.c.obj CMakeFiles/main.dir/BEE_1143.c.obj CMakeFiles/main.dir/BEE_1144.c.obj CMakeFiles/main.dir/BEE_1145.c.obj CMakeFiles/main.dir/BEE_1146.c.obj CMakeFiles/main.dir/BEE_1149.c.obj CMakeFiles/main.dir/BEE_1150.c.obj CMakeFiles/main.dir/BEE_1153.c.obj CMakeFiles/main.dir/BEE_1154.c.obj CMakeFiles/main.dir/BEE_1155.c.obj CMakeFiles/main.dir/BEE_1156.c.obj CMakeFiles/main.dir/BEE_1157.c.obj CMakeFiles/main.dir/BEE_1158.c.obj CMakeFiles/main.dir/BEE_1159.c.obj CMakeFiles/main.dir/BEE_1172.c.obj CMakeFiles/main.dir/BEE_1173.c.obj CMakeFiles/main.dir/BEE_1174.c.obj CMakeFiles/main.dir/BEE_1175.c.obj CMakeFiles/main.dir/BEE_1176.c.obj CMakeFiles/main.dir/BEE_1214.c.obj CMakeFiles/main.dir/BEE_1828(Bazinga!).c.obj CMakeFiles/main.dir/BEE_2670.c.obj CMakeFiles/main.dir/blachhole.c.obj CMakeFiles/main.dir/circularidade.c.obj CMakeFiles/main.dir/fibonacci.c.obj CMakeFiles/main.dir/teste.c.obj
   CONFIG = Debug
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
