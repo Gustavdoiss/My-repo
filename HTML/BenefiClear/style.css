@@ -1,0 +1,61 @@
+    body {
+      background-color: aliceblue;
+      font-family: "Inter", sans-serif;
+      font-style: normal;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+    }
+    .title {
+        color: aliceblue;
+        font-size: medium;
+        font-style: italic;
+        background-color: #4f46e5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: x-large;
+        border-radius: 16px;
+        box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.30);
+        width: 400px;
+    }
+    
+    .hidden {
+        display: none;
+    }
+
+    /*------------------*/
+    /*Configuração da interface do Iphone com Notch*/
+    .iphone {
+        width: 390px;
+        height: 844px;
+        border: 8px solid rgba(0, 0, 0, 1);
+        border-radius: 55px;
+        box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.30);
+        position: relative;
+    }
+    .notch {
+        width: 130px;
+        height: 30px;
+        background-color: black;
+        border-radius: 16px;
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .tela-iphone {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 47px;
+    }
+    /*------------------*/
+    /*Tela de login*/
+    .login-title {
+        height: 40%;
+        background: linear-gradient(to bottom, #0f766e, #99f6e4);
+    }
