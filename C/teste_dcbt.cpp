@@ -39,6 +39,8 @@
   #include <Servo.h>
   #include <Adafruit_GFX.h>       // tested on 1.11.10
   #include <WEMOS_Matrix_GFX.h>   // tested on 1.4.0iu332
+  #include "index_html.h"
+  #define lerVolt A0
   #define buzzer D8
 
   MLED matrix(7);
@@ -48,6 +50,9 @@
 
   int calibration = 0; //number between -50 and 50 to balance motors
 
+  int lerVolt;
+  int battery;
+
   int lpos = 1;
   int rpos = 6; 
   int aleat = 5;
@@ -56,7 +61,7 @@
 
   String serialAtual = "";
 
-  const char *ssid = "MeuDecabot";
+  const char *ssid = "Nibbles";
   const char *password = "";
   Servo servo0;
   Servo servo6;
@@ -129,238 +134,6 @@
     // Página raiz (cativa)
     server.on("/", HTTP_GET, [myIP](AsyncWebServerRequest *request) {
       String ipStr = myIP.toString();
-      String html = R"rawliteral(
-  <!DOCTYPE html>
-  <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Controle do Robô</title>
-    <style>
-      :root{
-        --bg:#1a1a2e;
-        --btn:#16213e;
-        --border:#0f3460;
-        --txt:#fff;
-        --accent:#0f3460;
-      }
-      *{box-sizing:border-box}
-      html,body{
-        height:100%;
-        margin:0;
-      }
-      body {
-        background: var(--bg);
-        font-family: Arial, Helvetica, sans-serif;
-        color: var(--txt);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 18px;
-        user-select: none;
-        -webkit-user-select: none;
-      }
-
-      .calibrador {
-        text-align: center;
-        margin-top: 10px;
-      }
-
-      h1{margin:0 0 4px 0;font-size:20px;opacity:.9}
-      .controle {
-        display: grid;
-        grid-template-columns: 90px 90px 90px;
-        grid-template-rows: 90px 90px 90px;
-        gap: 14px;
-        touch-action: none; /* evita scroll durante o toque */
-      }
-      .controle.dormindo button:not(.state1):not(.state2):not(.dbButton) {
-        background: #2a2a2a;
-        border-color: #444444;
-        color: #888888;
-        transition: background .3s, border-color .3s, color .3s;
-        pointer-events: none;
-      }
-      button {
-        background: var(--btn);
-        color: var(--txt);
-        border: 2px solid var(--border);
-        border-radius: 16px;
-        font-size: 22px;
-        cursor: pointer;
-        transition: transform .08s ease, background .15s ease;
-        outline: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-      button:active{
-        transform: scale(0.97);
-        background: var(--accent);
-      }
-      /* posição dos botões */
-      .frente  { grid-column: 2; grid-row: 1; }
-      .esquerda{ grid-column: 1; grid-row: 2; }
-      .state1  { grid-column: 2; grid-row: 2; }
-      .state2  { grid-column: 2; grid-row: 2; }
-      .direita { grid-column: 3; grid-row: 2; }
-      .tras    { grid-column: 2; grid-row: 3; }
-      .dbButton{ grid-column: 3; grid-row: 3; }
-
-      .status{
-        font-size:14px;
-        opacity:.85;
-      }
-      .dbPanel{
-        background: var(--btn);
-        color: var(--txt);
-        border: 2px solid rgb(255, 235, 205);
-        overflow-y: scroll;
-        border-radius: 16px;
-        font-size: 16px;
-        box-shadow: rgba(0, 0, 0, 0.342) 5px 5px 10px;
-        width: 250px;
-        height: 200px;
-      }
-
-      @media (max-width: 420px){
-        .controle{
-          grid-template-columns: 80px 80px 80px;
-          grid-template-rows: 80px 80px 80px;
-          gap: 12px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Controle do Robô</h1>
-
-    <div class="controle">
-      <button class="frente"   aria-label="Frente"   onpointerdown="press('Front')" onpointerup="release()" onpointerleave="release()">▲</button>
-      <button class="esquerda" aria-label="Esquerda" onpointerdown="press('Left')"  onpointerup="release()" onpointerleave="release()">◄</button>
-      <button class="direita"  aria-label="Direita"  onpointerdown="press('Right')" onpointerup="release()" onpointerleave="release()">►</button>
-      <button class="tras"     aria-label="Trás"     onpointerdown="press('Back')"  onpointerup="release()" onpointerleave="release()">▼</button>
-      <button class="state1"    aria-label="Estado"  onclick="acordar('levanta')">🌜</button>
-      <button class="state2"    aria-label="Estado"  onclick="acordar('apaga')">🌞</button>
-      <button class="dbButton"  aria-label="debugar" onclick="debugar()">DB</button>
-    </div>
-
-    <div class="calibrador">
-      <span>Calibração: <strong id="valorCalib" class="valorCalib">0</strong></span>
-      <br>
-      <input id="calibBarra" type="range"  min="-50" max="50" value="0" onchange="newCalibration(this.value)" oninput="changeCVT(this.value)">
-    </div>
-
-    <div class="status">LED status: <strong id="ledState">unknown</strong></div>
-    <a href="http://)rawliteral" + ipStr + R"rawliteral(/" style="color:#9bd">Abrir no navegador</a>
-    <div class="dbPanel">
-      <ul class="serials"></ul>
-    </div>
-    <script>
-      let dbOn = false;
-      let isPressed = false;
-      let acordado = false;
-      let intervalo = null;
-      const controle = document.querySelector('.controle');
-      const botaoDormindo = document.querySelector('.state1');
-      const botaoAcordado = document.querySelector('.state2');
-      const dbPanel = document.querySelector('.dbPanel');
-      const serials = document.querySelector('.serials');
-      dbPanel.style.visibility = "hidden";
-      botaoAcordado.style.visibility = "hidden";
-      controle.classList.add('dormindo');
-
-      function changeCVT(value) {
-        const textCalib = document.getElementById('valorCalib');
-        textCalib.innerHTML = value;
-      }
-
-      function newCalibration(value) {
-        return fetch('/calibrar?val=' + value)
-          .catch(() => {});
-      }
-
-      function setLED(state) {
-        return fetch('/led?state=' + state)
-          .then(r => r.text())
-          .then(text => {
-            const el = document.getElementById('ledState');
-            if (el) el.textContent = text;
-          })
-          .catch(() => {});
-      }
-
-      function press(direction){
-        if (isPressed) return;
-        isPressed = true;
-        setLED(direction);
-      }
-
-      function release(){
-        if (!isPressed) return;
-        isPressed = false;
-        setLED('Stop'); // volta para neutro ao SOLTAR
-      }
-
-      function acordar(estado) {
-        if (!acordado) {
-          acordado = true;
-          botaoAcordado.style.visibility = "visible";
-          botaoDormindo.style.visibility = "hidden";
-          controle.classList.remove('dormindo');
-          return fetch('/acordar?situacao=' + estado)
-          .catch(() => {});
-        }else {
-          acordado = false;
-          botaoAcordado.style.visibility = "hidden";
-          botaoDormindo.style.visibility = "visible";
-          controle.classList.add('dormindo');
-          return fetch('/acordar?situacao=' + estado)
-          .catch(() => {});
-        }
-      }
-
-      function debugar() {
-        if (!dbOn) {
-          dbOn = true;
-          dbPanel.style.visibility = "visible";
-          intervalo = setInterval(() => {
-            fetch('/serial')
-            .then(r => r.text())
-            .then(text => {
-              if (text != "") {
-                const newItem = document.createElement('li');
-                newItem.innerHTML = `${text}`;
-                serials.appendChild(newItem);
-              }
-            })
-          }, 500);
-        }else {
-          dbOn = false;
-          dbPanel.style.visibility = "hidden";
-          clearInterval(intervalo);
-          intervalo = null;
-        }
-      }
-
-      function getLEDStatus() {
-        fetch('/status')
-          .then(r => r.text())
-          .then(text => {
-            const el = document.getElementById('ledState');
-            if (el) el.textContent = text;
-          })
-          .catch(() => {});
-      }
-
-      // Se sair da aba, solta os botões
-      window.addEventListener('blur', release);
-      // Estado inicial
-      window.onload = getLEDStatus;
-    </script>
-  </body>
-  </html>
-      )rawliteral";
-
       request->send(200, "text/html", html);
     });
 
@@ -369,6 +142,12 @@
       request->send(200, "text/plain", serialAtual);
       serialAtual = "";
     });
+
+    // Porcentagem da bateria na web
+    server.on("/bateria", HTTP_GET, [](AsyncWebServerRequest *resquest) {
+      request->send(200, "text/plain", serialAtual);
+
+    })
 
     // Comandos: Front / Left / Right / Back / Stop
     server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -466,6 +245,11 @@
 
   void loop() {
     dnsServer.processNextRequest();
+
+    //Ler a bateria atual do arduino.
+    lerVolt = analogRead(A0);
+    battery = map(lerVolt, 683, 1023, 0, 100);
+    battery = constrain(porcentagem, 0, 100);
 
     if(awake){
       // animação dos olhos + buzzer (mantida)

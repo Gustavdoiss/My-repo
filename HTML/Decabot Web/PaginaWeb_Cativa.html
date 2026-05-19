@@ -43,7 +43,7 @@
       gap: 14px;
       touch-action: none; /* evita scroll durante o toque */
     }
-    .controle.dormindo button:not(.state1):not(.state2):not(.dbButton) {
+    .controle.dormindo button:not(.state1):not(.state2):not(.dbButton):not(.bateria):not(.clear) {
       background: #2a2a2a;
       border-color: #444444;
       color: #888888;
@@ -73,6 +73,8 @@
     .direita { grid-column: 3; grid-row: 2; }
     .tras    { grid-column: 2; grid-row: 3; }
     .dbButton{ grid-column: 3; grid-row: 3; }
+    .bateria { grid-column: 1; grid-row: 1; }
+    .clear   { grid-column: 3; grid-row: 1; }
 
     .status{
       font-size:14px;
@@ -88,7 +90,17 @@
       box-shadow: #603410 5px 5px 10px;
       width: 250px;
       height: 200px;
-      
+    }
+    .bateria {
+      background: var(--btn);
+      color: var(--txt);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      font-size: 19px;
+      padding: 10px;
+      transition: transform .08s ease, background .15s ease;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     @media (max-width: 420px){
@@ -108,9 +120,11 @@
     <button class="esquerda" aria-label="Esquerda" onpointerdown="press('Left')"  onpointerup="release()" onpointerleave="release()">◄</button>
     <button class="direita"  aria-label="Direita"  onpointerdown="press('Right')" onpointerup="release()" onpointerleave="release()">►</button>
     <button class="tras"     aria-label="Trás"     onpointerdown="press('Back')"  onpointerup="release()" onpointerleave="release()">▼</button>
-    <button class="state1"    aria-label="Estado"  onclick="acordar('levanta')">🌜</button>
-    <button class="state2"    aria-label="Estado"  onclick="acordar('apaga')">🌞</button>
-    <button class="dbButton"  aria-label="debugar" onclick="debugar()">DB</button>
+    <button class="state1"   aria-label="Estado"   onclick="acordar('levanta')">🌜</button>
+    <button class="state2"   aria-label="Estado"   onclick="acordar('apaga')">🌞</button>
+    <button class="dbButton" aria-label="debugar"  onclick="debugar()">DB</button>
+    <button class="bateria">???%🔋</button>
+    <button class="clear"    aria-label="limparDB" onclick="limpar()">Clear</button>
   </div>
 
   <div class="calibrador">
@@ -128,16 +142,28 @@
     let dbOn = false;
     let isPressed = false;
     let acordado = false;
+    let controleConectado = false;
+    let L1Press = false;
+    let R1Press = false;
+    let bYPress = false;
     let intervalo = null;
+    let intervaloBat = null;
+    let ultimoEixoY = 0;
+    let ultimoEixoX = 0;
     const controle = document.querySelector('.controle');
     const botaoDormindo = document.querySelector('.state1');
     const botaoAcordado = document.querySelector('.state2');
     const dbPanel = document.querySelector('.dbPanel');
     const serials = document.querySelector('.serials');
+    const bateria = document.querySelector('.bateria');
+    const btnClear = document.querySelector('.clear');
     dbPanel.style.visibility = "hidden";
     botaoAcordado.style.visibility = "hidden";
+    btnClear.style.visibility = "hidden";
     controle.classList.add('dormindo');
 
+    //-----------------------------------//
+    // Funções para Calibração do Decabot
     function changeCVT(value) {
       const textCalib = document.getElementById('valorCalib');
       textCalib.innerHTML = value;
@@ -147,7 +173,8 @@
       return fetch('/calibrar?val=' + value)
         .catch(() => {});
     }
-
+    //-----------------------------------//
+    // Retorno do Estado do LED
     function setLED(state) {
       return fetch('/led?state=' + state)
         .then(r => r.text())
@@ -158,6 +185,18 @@
         .catch(() => {});
     }
 
+    function getLEDStatus() {
+      fetch('/status')
+        .then(r => r.text())
+        .then(text => {
+          const el = document.getElementById('ledState');
+          if (el) el.textContent = text;
+        })
+        .catch(() => {});
+    }
+
+    //-----------------------------------//
+    // Movimentação do Decabot
     function press(direction){
       if (isPressed) return;
       isPressed = true;
@@ -169,7 +208,8 @@
       isPressed = false;
       setLED('Stop'); // volta para neutro ao SOLTAR
     }
-
+    //-----------------------------------//
+    // Alterar o estado atual de ativação do Robô.
     function acordar(estado) {
       if (!acordado) {
         acordado = true;
@@ -187,18 +227,21 @@
         .catch(() => {});
       }
     }
-
+    //-----------------------------------//
+    // Função para habilitar | limpar o painel de Debug
     function debugar() {
       if (!dbOn) {
         dbOn = true;
         dbPanel.style.visibility = "visible";
+        btnClear.style.visibility = "visible";
         intervalo = setInterval(() => {
           fetch('/serial')
           .then(r => r.text())
           .then(text => {
             if (text != "") {
               const newItem = document.createElement('li');
-              newItem.innerHTML = `${text}`;
+              const agora = new Date();
+              newItem.innerHTML = `${agora.getHours()}:${String(agora.getMinutes()).padStart(2, '0')}:${String(agora.getSeconds()).padStart(2, '0')} -> ${text}`;
               serials.appendChild(newItem);
             }
           })
@@ -206,23 +249,128 @@
       }else {
         dbOn = false;
         dbPanel.style.visibility = "hidden";
+        btnClear.style.visibility = "hidden";
         clearInterval(intervalo);
         intervalo = null;
       }
     }
 
-    function getLEDStatus() {
-      fetch('/status')
-        .then(r => r.text())
-        .then(text => {
-          const el = document.getElementById('ledState');
-          if (el) el.textContent = text;
-        })
-        .catch(() => {});
+    function limpar() {
+      serials.innerHTML = '';
     }
+    //-----------------------------------//
+    // Função Bateria
+    intervaloBat = setInterval(() => {
+          fetch('/bateria')
+          .then(r => r.text())
+          .then(text => {
+            if (text != "") {
+              let carga = Number(text);
+              if (carga > 50) {
+                bateria.innerHTML = `${text}%🔋`
+              }else {
+                bateria.innerHTML = `${text}%🪫`
+              }
+            }
+          })
+        }, 10000);
 
     // Se sair da aba, solta os botões
     window.addEventListener('blur', release);
+    
+    function valorDifY(eixoY) {
+      if (Math.abs(eixoY - ultimoEixoY) > 0.1) {
+        ultimoEixoY = eixoY;
+        return true;
+      }
+      return false;
+    }
+
+    function valorDifX(eixoX) {
+      if (Math.abs(eixoX - ultimoEixoX) > 0.1) {
+        ultimoEixoX = eixoX;
+        return true;
+      }
+      return false;
+    }
+
+    function controlador() {
+      if (!controleConectado) return;
+
+      const gamepad = navigator.getGamepads()[0];
+      const y   = gamepad.axes[1];
+      const x   = gamepad.axes[2];
+      const L1  = gamepad.buttons[4].value;
+      const R1  = gamepad.buttons[5].value;
+      const bY  = gamepad.buttons[3].value;
+
+      if (valorDifY(y)) {
+        if (y > 0.5) {
+          setLED('Front');
+        }else if (y < -0.5) {
+          setLED('Back')
+        }
+      }
+
+      if (valorDifX(x)) {
+        if (x > 0.5) {
+          setLED('Right');
+        }else if (x < -0.5) {
+          setLED('Left')
+        }
+      }
+
+      if ((x < 0.5 && x > -0.5) && (y < 0.5 && y > -0.5)) {
+        setLED('Stop');
+      }
+
+      if (L1 == 1 && !L1Press) {
+        L1Press = true;
+         debugar();
+      } else if (L1 == 0) {
+        L1Press = false;
+      }
+
+      if (R1 == 1 && !R1Press) {
+        R1Press = true;
+        if (!acordado) {
+          acordar('levanta');
+        } else {
+          acordar('apaga');
+        }
+      } else if (R1 == 0) {
+        R1Press = false;
+      }
+
+      if (bY == 1 && !bYPress) {
+        bYPress = true;
+        limpar();
+      } else if (bY == 0) {
+        bYPress = false;
+    }
+
+      requestAnimationFrame(controlador);
+    }
+
+    window.addEventListener('gamepadconnected', (controller) => {
+      const newItem = document.createElement('li');
+      const agora = new Date();
+      newItem.innerHTML = `${agora.getHours()}:${String(agora.getMinutes()).padStart(2, '0')}:${String(agora.getSeconds()).padStart(2, '0')} -> Controle Conectado! ${controller.gamepad.id}`;
+      serials.appendChild(newItem);
+      controleConectado = true;
+
+      requestAnimationFrame(controlador);
+    })
+    window.addEventListener('gamepaddisconnected', (controller) => {
+      const newItem = document.createElement('li');
+      const agora = new Date();
+      newItem.innerHTML = `${agora.getHours()}:${String(agora.getMinutes()).padStart(2, '0')}:${String(agora.getSeconds()).padStart(2, '0')} -> Controle Desconectado!`;
+      serials.appendChild(newItem);
+      controleConectado = false;
+    })
+
+
+
     // Estado inicial
     window.onload = getLEDStatus;
   </script>
