@@ -40,7 +40,6 @@
   #include <Adafruit_GFX.h>       // tested on 1.11.10
   #include <WEMOS_Matrix_GFX.h>   // tested on 1.4.0iu332
   #include "index_html.h"
-  #define lerVolt A0
   #define buzzer D8
 
   MLED matrix(7);
@@ -49,9 +48,6 @@
   int fastSpeed = 60; //number between 1 and 180 max.
 
   int calibration = 0; //number between -50 and 50 to balance motors
-
-  int lerVolt;
-  int battery;
 
   int lpos = 1;
   int rpos = 6; 
@@ -143,12 +139,6 @@
       serialAtual = "";
     });
 
-    // Porcentagem da bateria na web
-    server.on("/bateria", HTTP_GET, [](AsyncWebServerRequest *resquest) {
-      request->send(200, "text/plain", serialAtual);
-
-    })
-
     // Comandos: Front / Left / Right / Back / Stop
     server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request) {
       if (request->hasParam("state")) {
@@ -158,8 +148,8 @@
         if (state == "Front") {
           digitalWrite(LED_PIN, LOW);
           ledState = true;
-          motorLeft(100);
-          motorRight(100);
+          motorLeft(50);
+          motorRight(50);
         } else if (state == "Left") {
           digitalWrite(LED_PIN, LOW);
           ledState = true;
@@ -245,11 +235,6 @@
 
   void loop() {
     dnsServer.processNextRequest();
-
-    //Ler a bateria atual do arduino.
-    lerVolt = analogRead(A0);
-    battery = map(lerVolt, 683, 1023, 0, 100);
-    battery = constrain(porcentagem, 0, 100);
 
     if(awake){
       // animação dos olhos + buzzer (mantida)

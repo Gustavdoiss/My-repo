@@ -43,7 +43,7 @@
       gap: 14px;
       touch-action: none; /* evita scroll durante o toque */
     }
-    .controle.dormindo button:not(.state1):not(.state2):not(.dbButton):not(.bateria):not(.clear) {
+    .controle.dormindo button:not(.state1):not(.state2):not(.dbButton):not(.clear) {
       background: #2a2a2a;
       border-color: #444444;
       color: #888888;
@@ -91,17 +91,6 @@
       width: 250px;
       height: 200px;
     }
-    .bateria {
-      background: var(--btn);
-      color: var(--txt);
-      border: 2px solid var(--border);
-      border-radius: 16px;
-      font-size: 19px;
-      padding: 10px;
-      transition: transform .08s ease, background .15s ease;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
 
     @media (max-width: 420px){
       .controle{
@@ -123,7 +112,6 @@
     <button class="state1"   aria-label="Estado"   onclick="acordar('levanta')">🌜</button>
     <button class="state2"   aria-label="Estado"   onclick="acordar('apaga')">🌞</button>
     <button class="dbButton" aria-label="debugar"  onclick="debugar()">DB</button>
-    <button class="bateria">???%🔋</button>
     <button class="clear"    aria-label="limparDB" onclick="limpar()">Clear</button>
   </div>
 
@@ -146,7 +134,6 @@
     let R1Press = false;
     let bYPress = false;
     let intervalo = null;
-    let intervaloBat = null;
     let ultimoEixoY = 0;
     let ultimoEixoX = 0;
     const controle = document.querySelector('.controle');
@@ -154,7 +141,6 @@
     const botaoAcordado = document.querySelector('.state2');
     const dbPanel = document.querySelector('.dbPanel');
     const serials = document.querySelector('.serials');
-    const bateria = document.querySelector('.bateria');
     const btnClear = document.querySelector('.clear');
     dbPanel.style.visibility = "hidden";
     botaoAcordado.style.visibility = "hidden";
@@ -258,33 +244,6 @@
       serials.innerHTML = '';
     }
     //-----------------------------------//
-    // Função Bateria
-    intervaloBat = setInterval(() => {
-          fetch('/bateria')
-          .then(r => r.text())
-          .then(text => {
-            if (text != "") {
-              let carga = Number(text);
-              if (carga > 50) {
-                bateria.innerHTML = `${text}%🔋`
-              }else {
-                bateria.innerHTML = `${text}%🪫`
-              }
-            }
-          })
-        }, 10000);
-
-    // Se sair da aba, solta os botões
-    window.addEventListener('blur', release);
-    
-    function valorDifY(eixoY) {
-      if (Math.abs(eixoY - ultimoEixoY) > 0.1) {
-        ultimoEixoY = eixoY;
-        return true;
-      }
-      return false;
-    }
-
     function valorDifX(eixoX) {
       if (Math.abs(eixoX - ultimoEixoX) > 0.1) {
         ultimoEixoX = eixoX;
@@ -292,6 +251,14 @@
       }
       return false;
     }
+
+    function valorDifY(eixoY) {
+      if (Math.abs(eixoY - ultimoEixoY) > 0.1) {
+        ultimoEixoY = eixoY;
+        return true;
+      }
+      return false;
+    }    
 
     function controlador() {
       if (!controleConectado) return;
@@ -367,6 +334,12 @@
       serials.appendChild(newItem);
       controleConectado = false;
     })
+
+
+    // Se sair da aba, solta os botões
+    window.addEventListener('blur', release);
+    
+
 
 
 
