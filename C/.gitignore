@@ -1,0 +1,9 @@
+# Configs dos Editores
+.vscode/
+.idea/
+
+# Build configs
+cmake-build-*/
+*.o
+*out
+*exe
