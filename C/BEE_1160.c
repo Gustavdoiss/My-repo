@@ -2,8 +2,8 @@
 
 int main() {
 
-    int t, pa, pb, anos, temp;
-    double g1, g2;
+    int t, pa, pb, anos;
+    double g1, g2, temp;
     int sec = 0;
     scanf("%d", &t);
 
@@ -11,17 +11,16 @@ int main() {
         scanf("%d %d %lf %lf", &pa, &pb, &g1, &g2);
         anos = 0;
         temp = pa;
-        while (temp < pb) {
-            if (anos > 100) {
-                sec = 1;
-                break;
-            }else {
-                temp *= ((g1/100) + 1);
-                anos++;
-            }
+
+        while (temp <= pb && anos <= 100) {
+            anos++;
+            temp *= ((g1/100) + 1);
+            pb   *= ((g2/100) + 1);
         }
-        if (sec == 1) { printf("Mais de 1 seculo.\n"); }
-        else     { printf("%d anos.\n", anos);    }
-    }
+
+        if (anos > 100)    { printf("Mais de 1 seculo.\n"); }
+        else               { printf("%d anos.\n", anos);    }
+        }
+
     return 0;
 }
