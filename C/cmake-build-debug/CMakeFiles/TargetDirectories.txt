@@ -1,3 +1,0 @@
-/home/Senalitz/Programação/My-repo/Códigos C/cmake-build-debug/CMakeFiles/main.dir
-/home/Senalitz/Programação/My-repo/Códigos C/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/Senalitz/Programação/My-repo/Códigos C/cmake-build-debug/CMakeFiles/rebuild_cache.dir
