@@ -9,7 +9,11 @@ function inverterArr (x) {
     }
 }
 
+let nome = prompt('Insira o seu nome: ');
+
 let arr = [3, 9, 2, 4, 5, 1];
+
+console.log("Olá " + nome);
 
 console.log(arr);
 inverterArr(arr);

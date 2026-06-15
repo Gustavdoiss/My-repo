@@ -1,10 +1,18 @@
-code1 = input()
-num1  = int(input())
-val1  = float(input())
-code2 = input()
-num2  = int(input())
-val2  = float(input())
+horaIni, minIni, horaFim, minFim = map(int, input().split())
 
-total = num1*val1 + num2*val2
+if horaIni > horaFim:
+    horas = horaFim+24 - horaIni
+    if minIni > minFim:
+        horas -= 1
+        minutos = minFim+60 - minIni
+    else:
+        minutos = minFim - minIni
+elif horaIni <= horaFim:
+    horas = horaFim - horaIni
+    if minIni > minFim:
+        horas -= 1
+        minutos = minFim+60 - minIni
+    else:
+        minutos = minFim - minIni
 
-print(f"VALOR A PAGAR: R$ {total:.2f}")
+print(f"O JOGO DUROU {horas} HORA(S) E {minutos} MINUTO(S)")
