@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BenefiClear - Central de Telas Cerbras</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: system-ui, -apple-system, sans-serif; 
+      display: flex; 
+      flex-direction: column; 
+      height: 100vh; 
+      overflow: hidden; 
+      background-color: #0A0F18; /* Fundo neutro escuro para destacar as telas */
+    }
+    
+    /* ===== MENU FIXO NO TOPO ===== */
+    .master-nav {
+      background-color: #1A2840;
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      z-index: 1000;
+      border-bottom: 2px solid #2D6494;
+    }
+    .master-nav-title {
+      font-weight: 700;
+      margin-right: auto;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-nav {
+      background-color: #2D6494;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-nav:hover { 
+      background-color: #3A78AE; 
+      transform: translateY(-1px);
+    }
+    .btn-nav.active { 
+      background-color: #1A6840; 
+      box-shadow: 0 0 0 2px #4CE880; 
+    }
+    
+    /* ===== ÁREA DE VISUALIZAÇÃO ===== */
+    .viewer-container {
+      flex: 1;
+      width: 100%;
+      position: relative;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background-color: #F4F6F9;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="master-nav">
+    <div class="master-nav-title">
+      🏭 Cerbras · Portfólio de Interfaces
+    </div>
+    <button class="btn-nav active" onclick="mudarTela('desktop', this)">💻 Portal Admin</button>
+    <button class="btn-nav" onclick="mudarTela('app', this)">📱 App Funcionário</button>
+    <button class="btn-nav" onclick="mudarTela('totem', this)">📺 Totem Refeitório</button>
+  </nav>
+
+  <div class="viewer-container">
+    <iframe id="tela-viewer" title="Visualizador de Telas"></iframe>
+  </div>
+
+  <textarea id="code-desktop" style="display: none;">
+    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BenefiClear Admin · Desktop · Cerbras</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:system-ui,-apple-system,sans-serif;font-size:13px;color:#1A2840}
+
+/* ===== LOGIN ===== */
+.login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#1F4E78 0%,#0D3052 100%);display:flex;align-items:center;justify-content:center;z-index:1000;transition:opacity .3s}
+.login-overlay.hidden{opacity:0;pointer-events:none}
+.login-box{background:#fff;border-radius:18px;padding:40px;width:420px;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.login-logo-icon{width:46px;height:46px;background:#1F4E78;border-radius:13px;display:flex;align-items:center;justify-content:center}
+.login-title{font-size:22px;font-weight:700;color:#1F4E78}
+.login-sub{font-size:12px;color:#6A7E9E;margin-top:2px}
+.login-divider{font-size:10px;color:#8A9EB8;letter-spacing:.5px;margin-bottom:16px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:11px;color:#5A6E8A;letter-spacing:.4px;margin-bottom:5px;display:block;font-weight:500}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid #D8E2EE;border-radius:9px;font-size:13px;color:#1A2840;outline:none;transition:border-color .2s;background:#fff}
+.form-input:focus{border-color:#1F4E78}
+.btn-login{width:100%;padding:13px;background:#1F4E78;border:none;color:#fff;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s}
+.btn-login:hover{background:#245887}
+.login-note{font-size:11px;color:#8A9EB8;text-align:center;margin-top:16px}
+
+/* ===== MAIN LAYOUT ===== */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* Sidebar */
+.sidebar{width:220px;background:#1F4E78;display:flex;flex-direction:column;flex-shrink:0;transition:width .2s}
+.sb-brand{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-logo{display:flex;align-items:center;gap:10px}
+.sb-logo-icon{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.sb-title{font-size:14px;font-weight:700;color:#fff}
+.sb-client{font-size:10px;color:rgba(255,255,255,.6);margin-top:1px}
+.sb-nav{padding:12px 10px;flex:1;overflow-y:auto}
+.sb-section{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.8px;padding:8px 10px 4px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;cursor:pointer;color:rgba(255,255,255,.75);transition:all .15s;font-size:12.5px;font-weight:500;position:relative;margin-bottom:1px}
+.sb-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.sb-item.active{background:rgba(255,255,255,.18);color:#fff}
+.sb-item i{font-size:17px;flex-shrink:0}
+.sb-badge{margin-left:auto;background:#C03A3A;color:#fff;font-size:9px;padding:1px 6px;border-radius:8px;font-weight:600}
+.sb-footer{padding:14px;border-top:1px solid rgba(255,255,255,.1)}
+.sb-user{display:flex;align-items:center;gap:9px;cursor:pointer}
+.sb-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1A6840,#2E9960);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-un{font-size:12px;color:#fff;font-weight:500}
+.sb-ur{font-size:10px;color:rgba(255,255,255,.6)}
+.sb-logout{margin-left:auto;color:rgba(255,255,255,.5);cursor:pointer;font-size:14px;transition:color .15s}
+.sb-logout:hover{color:#FF8080}
+
+/* Main area */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F4F6F9}
+.topbar{background:#fff;border-bottom:1px solid #E0E8F0;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-left{display:flex;align-items:center;gap:6px;font-size:12px;color:#8A9EB8}
+.topbar-left b{color:#1A2840;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-search{display:flex;align-items:center;gap:8px;background:#F4F6F9;border:1.5px solid #E0E8F0;border-radius:9px;padding:7px 12px;width:220px;transition:border-color .2s}
+.topbar-search:focus-within{border-color:#1F4E78;background:#fff}
+.topbar-search input{border:none;outline:none;background:transparent;font-size:12.5px;color:#1A2840;flex:1}
+.topbar-search input::placeholder{color:#8A9EB8}
+.topbar-btn{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#5A6E8A;background:#F4F6F9;border:1.5px solid #E0E8F0;transition:all .15s;position:relative}
+.topbar-btn:hover{border-color:#1F4E78;color:#1F4E78}
+.topbar-notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:#C03A3A;border-radius:50%;border:1.5px solid #fff}
+.content{flex:1;overflow-y:auto;padding:24px}
+.content::-webkit-scrollbar{width:5px}
+.content::-webkit-scrollbar-thumb{background:#C0CCE0;border-radius:5px}
+
+/* Views */
+.view{display:none}
+.view.on{display:block;animation:fadeIn .15s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Page header */
+.page-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.page-title{font-size:20px;font-weight:700;color:#1A2840}
+.page-sub{font-size:12px;color:#6A7E9E;margin-top:2px}
+
+/* KPI grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{background:#fff;border-radius:12px;padding:16px;border:.5px solid #E0E8F0;cursor:pointer;transition:all .15s}
+.kpi-card:hover{border-color:#1F4E78;transform:translateY(-1px);box-shadow:0 4px 12px rgba(31,78,120,.08)}
+.kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.kpi-icon{font-size:20px}
+.kpi-trend{font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px}
+.kpi-val{font-size:24px;font-weight:700;color:#1A2840}
+.kpi-lbl{font-size:11px;color:#6A7E9E;margin-top:3px}
+
+/* Two-col grid */
+.grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:20px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+
+/* Cards */
+.card{background:#fff;border-radius:12px;border:.5px solid #E0E8F0;overflow:hidden}
+.card-header{padding:14px 18px;border-bottom:.5px solid #E8EFF5;display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:13px;font-weight:600;color:#1A2840}
+.card-sub{font-size:11px;color:#8A9EB8;font-weight:400}
+.card-body{padding:14px 18px}
+
+/* Bar chart */
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:11.5px}
+.bar-row:last-child{margin-bottom:0}
+.bar-label{width:100px;color:#1A2840;display:flex;align-items:center;gap:6px}
+.bar-track{flex:1;height:8px;background:#EEF2F7;border-radius:5px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;transition:width .4s ease}
+.bar-val{width:40px;text-align:right;color:#6A7E9E;font-size:11px}
+
+/* Turno cards */
+.turno-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.turno-card{padding:12px;border-radius:10px;text-align:center}
+.turno-lbl{font-size:9.5px;font-weight:700;letter-spacing:.5px;margin-bottom:5px}
+.turno-val{font-size:22px;font-weight:700}
+.turno-sub{font-size:10px;margin-top:3px;opacity:.7}
+
+/* Activity list */
+.activity-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid #E8EFF5;font-size:12px}
+.activity-item:last-child{border-bottom:none}
+.activity-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.activity-t{flex:1;color:#1A2840}
+.activity-t b{font-weight:500}
+.activity-time{color:#8A9EB8;font-size:11px;flex-shrink:0}
+
+/* Table */
+.data-table{width:100%;border-collapse:separate;border-spacing:0}
+.data-table th{background:#F4F6F9;padding:10px 14px;text-align:left;font-size:10.5px;font-weight:600;color:#5A6E8A;letter-spacing:.4px;border-bottom:.5px solid #E0E8F0;white-space:nowrap}
+.data-table td{padding:12px 14px;border-bottom:.5px solid #E8EFF5;font-size:12.5px;vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:#F8FAFB}
+.data-table tr{cursor:pointer}
+.emp-cell{display:flex;align-items:center;gap:10px}
+.emp-av-sm{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
+.emp-name{font-weight:500;color:#1A2840}
+.emp-mat{font-size:10.5px;color:#8A9EB8;margin-top:1px;font-family:monospace}
+.pill{display:inline-block;padding:2px 9px;border-radius:8px;font-size:10px;font-weight:600;white-space:nowrap}
+.pill-g{background:#D4EDE0;color:#1A6840}
+.pill-y{background:#FBEACB;color:#9A6610}
+.pill-r{background:#FBD6DE;color:#C03A3A}
+.pill-b{background:#DCEAFB;color:#1F4E78}
+.ben-icons{font-size:13px;letter-spacing:1px}
+
+/* Toolbar */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.search-bar{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #E0E8F0;border-radius:9px;padding:8px 13px;flex:1;max-width:320px;transition:border-color .2s}
+.search-bar:focus-within{border-color:#1F4E78}
+.search-bar input{border:none;outline:none;font-size:12.5px;color:#1A2840;flex:1;background:transparent}
+.search-bar input::placeholder{color:#8A9EB8}
+.btn-primary{padding:9px 16px;background:#1F4E78;color:#fff;border:none;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+.btn-primary:hover{background:#245887;transform:translateY(-1px)}
+.btn-secondary{padding:9px 14px;background:#fff;color:#3A5A7E;border:1.5px solid #D8E2EE;border-radius:9px;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s}
+.btn-secondary:hover{border-color:#1F4E78;color:#1F4E78}
+.btn-success{padding:7px 13px;background:#1A6840;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
+.btn-success:hover{background:#1E7848}
+.btn-danger{padding:7px 13px;background:#fff;color:#C03A3A;border:.5px solid #FBD6DE;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+.btn-danger:hover{background:#FDF2F4}
+
+/* Detail panel */
+.detail-layout{display:grid;grid-template-columns:1fr 320px;gap:16px}
+.detail-main{}
+.detail-side{}
+.section-title{font-size:11px;color:#5A6E8A;letter-spacing:.5px;font-weight:600;margin-bottom:10px;margin-top:16px}
+.section-title:first-child{margin-top:0}
+.info-rows{background:#fff;border-radius:12px;border:.5px solid #E0E8F0;overflow:hidden;margin-bottom:14px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:.5px solid #E8EFF5;font-size:12.5px}
+.info-row:last-child{border-bottom:none}
+.info-l{color:#6A7E9E}
+.info-v{color:#1A2840;font-weight:500;text-align:right}
+.info-box{border-radius:10px;padding:11px 14px;font-size:12px;line-height:1.5;margin-bottom:12px}
+.info-b{background:#DCEAFB;color:#1B3E62;border-left:3px solid #1F4E78}
+.info-g{background:#D4EDE0;color:#1A5030;border-left:3px solid #1A6840}
+.info-y{background:#FBEACB;color:#7A4A10;border-left:3px solid #9A6610}
+.info-box b{font-weight:600}
+
+/* Cadastro steps */
+.steps-bar{display:flex;align-items:center;gap:0;margin-bottom:24px}
+.step-i{display:flex;align-items:center;gap:10px}
+.step-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid #D8E2EE;color:#8A9EB8;flex-shrink:0}
+.step-circle.active{background:#1F4E78;border-color:#1F4E78;color:#fff}
+.step-circle.done{background:#1A6840;border-color:#1A6840;color:#fff}
+.step-lbl{font-size:12px;color:#8A9EB8;font-weight:500}
+.step-lbl.active{color:#1F4E78;font-weight:600}
+.step-lbl.done{color:#1A6840}
+.step-line{flex:1;height:2px;background:#D8E2EE;margin:0 12px;min-width:60px}
+.step-line.done{background:#1A6840}
+
+/* Benefit toggles */
+.ben-toggle{background:#fff;border:1.5px solid #E0E8F0;border-radius:11px;padding:13px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:all .15s;cursor:default}
+.ben-toggle.on{border-color:#1F4E78;background:#F8FAFF}
+.ben-toggle-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ben-toggle-info{flex:1}
+.ben-toggle-name{font-size:13px;font-weight:600;color:#1A2840;display:flex;align-items:center;gap:8px}
+.ben-toggle-sub{font-size:11px;color:#6A7E9E;margin-top:2px}
+.auto-tag{font-size:9px;background:#D4EDE0;color:#1A6840;padding:1px 7px;border-radius:5px;font-weight:600}
+.exc-tag{font-size:9px;background:#FBEACB;color:#9A6610;padding:1px 7px;border-radius:5px;font-weight:600}
+.toggle-sw{width:40px;height:22px;background:#D0D8E8;border-radius:11px;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}
+.toggle-sw::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.ben-toggle.on .toggle-sw{background:#1F4E78}
+.ben-toggle.on .toggle-sw::after{left:20px}
+.exc-box{background:#FFF3E0;border-radius:8px;padding:9px 12px;font-size:11.5px;color:#7A4A10;display:none;align-items:flex-start;gap:8px;line-height:1.5;margin-bottom:8px}
+.exc-box.show{display:flex}
+
+/* Solicitações */
+.sol-row{display:grid;grid-template-columns:1fr 1fr 2fr auto;gap:14px;align-items:center;padding:14px 18px;border-bottom:.5px solid #E8EFF5;cursor:pointer;transition:background .15s}
+.sol-row:hover{background:#F8FAFB}
+.sol-row:last-child{border-bottom:none}
+.sol-who{display:flex;align-items:center;gap:9px}
+.sol-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
+.sol-desc{font-size:12px;color:#5A6E8A;line-height:1.4}
+.sol-desc b{color:#1A2840;font-weight:500}
+.sol-actions{display:flex;gap:7px;flex-shrink:0}
+
+/* Benefit catalog */
+.ben-catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.ben-cat-card{background:#fff;border-radius:12px;border:.5px solid #E0E8F0;padding:16px;cursor:pointer;transition:all .15s}
+.ben-cat-card:hover{border-color:#1F4E78;transform:translateY(-1px)}
+.ben-cat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ben-cat-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px}
+.ben-cat-n{font-size:13px;font-weight:600;color:#1A2840;margin-bottom:3px}
+.ben-cat-p{font-size:11px;color:#6A7E9E}
+.ben-stats{display:flex;gap:16px;padding-top:10px;border-top:.5px solid #E8EFF5}
+.ben-st{flex:1}
+.ben-st-l{font-size:9.5px;color:#6A7E9E;letter-spacing:.4px}
+.ben-st-v{font-size:14px;font-weight:700;color:#1A2840;margin-top:2px}
+
+/* IA */
+.ia-hero{background:linear-gradient(135deg,#1F4E78,#2D6494);border-radius:14px;padding:20px;color:#fff;margin-bottom:18px;display:flex;align-items:center;gap:16px}
+.ia-icon{width:52px;height:52px;background:rgba(255,255,255,.2);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.ia-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.ia-card{background:#fff;border-radius:12px;border:.5px solid #E0E8F0;padding:15px;border-left:3px solid #1F4E78}
+.ia-card.warn{border-left-color:#9A6610}
+.ia-card.good{border-left-color:#1A6840}
+.ia-card.danger{border-left-color:#C03A3A}
+.ia-tag{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:6px;margin-bottom:8px}
+.ia-tag.d{background:#DCEAFB;color:#1F4E78}
+.ia-tag.w{background:#FBEACB;color:#9A6610}
+.ia-tag.g{background:#D4EDE0;color:#1A6840}
+.ia-tag.r{background:#FBD6DE;color:#C03A3A}
+.ia-title{font-size:13px;font-weight:600;color:#1A2840;margin-bottom:5px}
+.ia-text{font-size:12px;color:#5A6E8A;line-height:1.5}
+.ia-text b{color:#1A2840;font-weight:500}
+
+/* Success */
+.success-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;text-align:center}
+.success-ico{font-size:72px;margin-bottom:16px}
+.success-title{font-size:24px;font-weight:700;color:#1F4E78;margin-bottom:8px}
+.success-sub{font-size:13px;color:#5A6E8A;line-height:1.6;max-width:400px;margin-bottom:18px}
+.success-code{background:#DCEAFB;color:#1F4E78;padding:9px 20px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:22px;display:inline-block}
+
+/* Loading */
+.loading-row{display:flex;align-items:center;gap:10px;padding:14px;background:#DCEAFB;border-radius:10px;margin-bottom:14px;font-size:12.5px;color:#1B3E62}
+.spin{width:16px;height:16px;border:2.5px solid #9EC4E8;border-top-color:#1F4E78;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err-box{background:#FDF2F4;border-left:3px solid #C03A3A;border-radius:9px;padding:11px 14px;font-size:12px;color:#C03A3A;display:none;align-items:flex-start;gap:8px;line-height:1.5}
+.err-box.show{display:flex}
+.err-box b{font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon"><i class="ti ti-building-skyscraper" style="font-size:22px;color:#fff"></i></div>
+      <div>
+        <div class="login-title">BenefiClear Admin</div>
+        <div class="login-sub">Portal da Empresa · Cerbras</div>
+      </div>
+    </div>
+    <div class="login-divider">CREDENCIAIS DE ACESSO</div>
+    <div class="form-group">
+      <label class="form-label">CNPJ</label>
+      <input class="form-input" value="35.029.057/0001-06"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">USUÁRIO ADMIN</label>
+      <input class="form-input" value="germana.medeiros"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">SENHA</label>
+      <input class="form-input" type="password" value="••••••••"/>
+    </div>
+    <button class="btn-login" onclick="doLogin()"><i class="ti ti-arrow-right"></i> Entrar no painel</button>
+    <div class="login-note">Acesso restrito a administradores autorizados · LGPD compliant</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">
+        <div class="sb-logo-icon"><i class="ti ti-building-skyscraper" style="font-size:16px;color:#fff"></i></div>
+        <div><div class="sb-title">BenefiClear</div><div class="sb-client">Cerbras · Maracanaú</div></div>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">PRINCIPAL</div>
+      <div class="sb-item active" id="sb-dashboard" onclick="go('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
+      <div class="sb-item" id="sb-colaboradores" onclick="go('colaboradores')"><i class="ti ti-users"></i> Colaboradores</div>
+      <div class="sb-item" id="sb-beneficios" onclick="go('beneficios')"><i class="ti ti-checklist"></i> Benefícios</div>
+      <div class="sb-item" id="sb-solicitacoes" onclick="go('solicitacoes')"><i class="ti ti-mail"></i> Solicitações <span class="sb-badge">7</span></div>
+      <div class="sb-item" id="sb-ia" onclick="go('ia')"><i class="ti ti-sparkles"></i> Análise IA</div>
+      <div class="sb-section" style="margin-top:8px">CONFIGURAÇÕES</div>
+      <div class="sb-item"><i class="ti ti-building-factory-2"></i> Empresa</div>
+      <div class="sb-item"><i class="ti ti-shield-lock"></i> Permissões</div>
+    </div>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-av">GM</div>
+        <div><div class="sb-un">Germana Medeiros</div><div class="sb-ur">Gerente de RH</div></div>
+        <div class="sb-logout" onclick="go('login')" title="Sair"><i class="ti ti-logout"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left" id="breadcrumb">
+        <span>Cerbras</span><i class="ti ti-chevron-right" style="font-size:12px"></i><b>Dashboard</b>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-search">
+          <i class="ti ti-search" style="font-size:14px;color:#8A9EB8"></i>
+          <input placeholder="Buscar colaborador, matrícula..."/>
+        </div>
+        <div class="topbar-btn" onclick="go('solicitacoes')">
+          <i class="ti ti-bell" style="font-size:16px"></i>
+          <div class="topbar-notif-dot"></div>
+        </div>
+        <div class="topbar-btn"><i class="ti ti-settings" style="font-size:16px"></i></div>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="view on" id="vw-dashboard">
+        <div class="page-h">
+          <div>
+            <div class="page-title">Dashboard · Cerbras</div>
+            <div class="page-sub">Qua, 03 de junho de 2026 · Turno A em andamento</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="pill pill-y">⏳ 7 solicitações urgentes</span>
+            <span class="pill pill-g">🏆 GPTW 14 anos consecutivos</span>
+          </div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card" onclick="go('colaboradores')">
+            <div class="kpi-top"><span class="kpi-icon">👥</span><span class="kpi-trend" style="background:#D4EDE0;color:#1A6840">+18 este mês</span></div>
+            <div class="kpi-val">1.247</div><div class="kpi-lbl">Colaboradores ativos</div>
+          </div>
+          <div class="kpi-card" onclick="go('beneficios')">
+            <div class="kpi-top"><span class="kpi-icon">🎁</span><span class="kpi-trend" style="background:#DCEAFB;color:#1F4E78">8 tipos</span></div>
+            <div class="kpi-val">9.614</div><div class="kpi-lbl">Benefícios vinculados</div>
+          </div>
+          <div class="kpi-card" onclick="go('solicitacoes')">
+            <div class="kpi-top"><span class="kpi-icon">⏳</span><span class="kpi-trend" style="background:#FBEACB;color:#9A6610">7 urgentes</span></div>
+            <div class="kpi-val">23</div><div class="kpi-lbl">Solicitações abertas</div>
+          </div>
+          <div class="kpi-card" onclick="go('ia')">
+            <div class="kpi-top"><span class="kpi-icon">📉</span><span class="kpi-trend" style="background:#FBD6DE;color:#C03A3A">▲ 0.3%</span></div>
+            <div class="kpi-val">4.2%</div><div class="kpi-lbl">Absenteísmo (mês)</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Adesão por benefício</span><span class="card-sub">% dos colaboradores</span></div>
+            <div class="card-body">
+              <div class="bar-row"><div class="bar-label">🍽️ Refeitório</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:#1A6840"></div></div><div class="bar-val">100%</div></div>
+              <div class="bar-row"><div class="bar-label">🏥 Plano Saúde</div><div class="bar-track"><div class="bar-fill" style="width:96%;background:#C03A3A"></div></div><div class="bar-val">96%</div></div>
+              <div class="bar-row"><div class="bar-label">🚌 Fretado</div><div class="bar-track"><div class="bar-fill" style="width:82%;background:#1F4E78"></div></div><div class="bar-val">82%</div></div>
+              <div class="bar-row"><div class="bar-label">🦷 Odonto</div><div class="bar-track"><div class="bar-fill" style="width:78%;background:#2C5282"></div></div><div class="bar-val">78%</div></div>
+              <div class="bar-row"><div class="bar-label">🛒 Vale Alim.</div><div class="bar-track"><div class="bar-fill" style="width:91%;background:#553C7E"></div></div><div class="bar-val">91%</div></div>
+              <div class="bar-row"><div class="bar-label">⚠️ Insalubridade</div><div class="bar-track"><div class="bar-fill" style="width:68%;background:#9A6610"></div></div><div class="bar-val">68%</div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="card">
+              <div class="card-header"><span class="card-title">Colaboradores por turno</span></div>
+              <div class="card-body">
+                <div class="turno-grid">
+                  <div class="turno-card" style="background:#D4EDE0"><div class="turno-lbl" style="color:#1A6840">TURNO A</div><div class="turno-val" style="color:#1A2840">423</div><div class="turno-sub" style="color:#2A5A40">06h – 14h</div></div>
+                  <div class="turno-card" style="background:#DCEAFB"><div class="turno-lbl" style="color:#1F4E78">TURNO B</div><div class="turno-val" style="color:#1A2840">412</div><div class="turno-sub" style="color:#1B3E62">14h – 22h</div></div>
+                  <div class="turno-card" style="background:#EDE5F7"><div class="turno-lbl" style="color:#553C7E">TURNO C</div><div class="turno-val" style="color:#1A2840">398</div><div class="turno-sub" style="color:#3A2A5A">22h – 06h</div></div>
+                  <div class="turno-card" style="background:#FFF3E0"><div class="turno-lbl" style="color:#9A6610">ADMIN</div><div class="turno-val" style="color:#1A2840">14</div><div class="turno-sub" style="color:#6A4A10">Comercial</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><span class="card-title">Atividade recente</span></div>
+              <div class="card-body">
+                <div class="activity-item"><div class="activity-ico" style="background:#D4EDE0">➕</div><div class="activity-t"><b>Maria Pereira</b> solicitou inclusão de dependente no plano de saúde</div><div class="activity-time">3 min</div></div>
+                <div class="activity-item"><div class="activity-ico" style="background:#DCEAFB">🚌</div><div class="activity-t"><b>Antônio Ferreira</b> pediu troca de rota do fretado</div><div class="activity-time">28 min</div></div>
+                <div class="activity-item"><div class="activity-ico" style="background:#E8F5EE">🤖</div><div class="activity-t">IA respondeu <b>47 dúvidas</b> dos colaboradores hoje</div><div class="activity-time">1h</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLABORADORES -->
+      <div class="view" id="vw-colaboradores">
+        <div class="page-h">
+          <div><div class="page-title">Colaboradores</div><div class="page-sub">1.247 ativos · 18 cadastrados este mês</div></div>
+        </div>
+        <div class="toolbar">
+          <div class="search-bar"><i class="ti ti-search" style="font-size:14px;color:#8A9EB8"></i><input placeholder="Buscar por nome, matrícula ou CPF"/></div>
+          <button class="btn-secondary"><i class="ti ti-filter"></i> Filtrar</button>
+          <button class="btn-secondary"><i class="ti ti-download"></i> Exportar</button>
+          <button class="btn-primary" onclick="go('cad-busca')" style="margin-left:auto"><i class="ti ti-plus"></i> Cadastrar colaborador</button>
+        </div>
+        <div class="card">
+          <table class="data-table">
+            <thead><tr>
+              <th>COLABORADOR</th><th>CARGO</th><th>TURNO</th><th>BENEFÍCIOS</th><th>ADMISSÃO</th><th>STATUS</th>
+            </tr></thead>
+            <tbody>
+              <tr onclick="go('emp-jose')">
+                <td><div class="emp-cell"><div class="emp-av-sm" style="background:#1F4E78">JS</div><div><div class="emp-name">José Silva</div><div class="emp-mat">00089234</div></div></div></td>
+                <td>Aux. de Produção</td><td>Turno A</td>
+                <td><span class="ben-icons">🚌🍽️🏥🦷🛒⚠️</span></td>
+                <td>14/03/2024</td><td><span class="pill pill-g">Ativo</span></td>
+              </tr>
+              <tr onclick="go('emp-maria')">
+                <td><div class="emp-cell"><div class="emp-av-sm" style="background:#1A6840">MP</div><div><div class="emp-name">Maria Pereira</div><div class="emp-mat">00091203</div></div></div></td>
+                <td>Op. de Máquinas</td><td>Turno B</td>
+                <td><span class="ben-icons">🚌🍽️🏥🦷🛒</span></td>
+                <td>02/11/2023</td><td><span class="pill pill-y">Pendente</span></td>
+              </tr>
+              <tr onclick="go('emp-antonio')">
+                <td><div class="emp-cell"><div class="emp-av-sm" style="background:#9A6610">AF</div><div><div class="emp-name">Antônio Ferreira</div><div class="emp-mat">00087445</div></div></div></td>
+                <td>Manut. Mecânico</td><td>Turno A</td>
+                <td><span class="ben-icons">🚌🍽️🏥🦷🛒⚠️</span></td>
+                <td>08/07/2021</td><td><span class="pill pill-g">Ativo</span></td>
+              </tr>
+              <tr onclick="go('emp-claudia')">
+                <td><div class="emp-cell"><div class="emp-av-sm" style="background:#553C7E">CC</div><div><div class="emp-name">Cláudia Carvalho</div><div class="emp-mat">00094501</div></div></div></td>
+                <td>Analista Qualidade</td><td>Comercial</td>
+                <td><span class="ben-icons">🍽️🏥🦷🛒</span></td>
+                <td>15/01/2025</td><td><span class="pill pill-g">Ativo</span></td>
+              </tr>
+              <tr>
+                <td><div class="emp-cell"><div class="emp-av-sm" style="background:#C03A3A">RL</div><div><div class="emp-name">Roberto Lima</div><div class="emp-mat">00092877</div></div></div></td>
+                <td>Expedição</td><td>Turno C</td>
+                <td><span class="ben-icons">🚌🍽️🏥🛒</span></td>
+                <td>22/09/2022</td><td><span class="pill pill-g">Ativo</span></td>
+              </tr>
+              <tr>
+                <td><div class="emp-cell"><div class="emp-av-sm" style="background:#2C5282">TM</div><div><div class="emp-name">Tatiane Moura</div><div class="emp-mat">00095102</div></div></div></td>
+                <td>Aux. Produção</td><td>Turno B</td>
+                <td><span class="ben-icons">🚌🍽️🏥🦷🛒⚠️</span></td>
+                <td>03/03/2026</td><td><span class="pill pill-b">Novo</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EMP DETAIL: JOSÉ -->
+      <div class="view" id="vw-emp-jose">
+        <div class="page-h">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn-secondary" onclick="go('colaboradores')" style="padding:7px 12px"><i class="ti ti-arrow-left"></i> Colaboradores</button>
+            <div><div class="page-title">José Silva</div><div class="page-sub">Aux. de Produção · Esmaltação · Matrícula 00089234</div></div>
+          </div>
+          <span class="pill pill-g" style="font-size:12px;padding:5px 14px">Ativo</span>
+        </div>
+        <div class="detail-layout">
+          <div class="detail-main">
+            <div class="section-title">DADOS DO VÍNCULO</div>
+            <div class="info-rows">
+              <div class="info-row"><span class="info-l">Turno</span><span class="info-v">Turno A (06h–14h)</span></div>
+              <div class="info-row"><span class="info-l">Setor</span><span class="info-v">Esmaltação</span></div>
+              <div class="info-row"><span class="info-l">Data de admissão</span><span class="info-v">14/03/2024</span></div>
+              <div class="info-row"><span class="info-l">Regime</span><span class="info-v">CLT · Tempo integral</span></div>
+              <div class="info-row"><span class="info-l">CPF</span><span class="info-v">123.***.***-89</span></div>
+            </div>
+            <div class="section-title">BENEFÍCIOS ATIVOS (7)</div>
+            <div class="info-rows">
+              <div class="info-row"><span class="info-l">🚌 Transporte Fretado</span><span class="info-v"><span class="pill pill-g">Ativo</span> · Rota 3 Messejana</span></div>
+              <div class="info-row"><span class="info-l">🍽️ Refeitório</span><span class="info-v"><span class="pill pill-g">Ativo</span> · Gratuito</span></div>
+              <div class="info-row"><span class="info-l">🏥 Plano de Saúde</span><span class="info-v"><span class="pill pill-g">Ativo</span> · Hapvida · 1 dep.</span></div>
+              <div class="info-row"><span class="info-l">🦷 Odontológico</span><span class="info-v"><span class="pill pill-g">Ativo</span> · OdontoPrev</span></div>
+              <div class="info-row"><span class="info-l">🛒 Vale Alimentação</span><span class="info-v"><span class="pill pill-g">Ativo</span> · R$ 500/mês</span></div>
+              <div class="info-row"><span class="info-l">⚠️ Insalubridade</span><span class="info-v"><span class="pill pill-g">Ativo</span> · 20% · R$ 282,44</span></div>
+              <div class="info-row"><span class="info-l">🏺 Desconto Cerbras</span><span class="info-v"><span class="pill pill-g">Ativo</span> · 15% em produtos</span></div>
+            </div>
+          </div>
+          <div class="detail-side">
+            <div class="card card-body" style="margin-bottom:12px">
+              <div style="font-size:11px;color:#5A6E8A;margin-bottom:10px;letter-spacing:.4px;font-weight:600">AÇÕES RÁPIDAS</div>
+              <button class="btn-primary" style="width:100%;margin-bottom:8px" onclick="go('solicitacoes')"><i class="ti ti-mail"></i> Ver solicitações</button>
+              <button class="btn-secondary" style="width:100%;margin-bottom:8px"><i class="ti ti-edit"></i> Editar benefícios</button>
+              <button class="btn-secondary" style="width:100%;color:#C03A3A;border-color:#FBD6DE"><i class="ti ti-user-off"></i> Desligar colaborador</button>
+            </div>
+            <div class="card card-body">
+              <div style="font-size:11px;color:#5A6E8A;margin-bottom:10px;letter-spacing:.4px;font-weight:600">DEPENDENTE</div>
+              <div style="font-size:12.5px;color:#1A2840;font-weight:500">Maria Silva</div>
+              <div style="font-size:11px;color:#6A7E9E;margin-top:2px">Cônjuge · Plano de Saúde</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMP DETAIL: MARIA -->
+      <div class="view" id="vw-emp-maria">
+        <div class="page-h">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn-secondary" onclick="go('colaboradores')" style="padding:7px 12px"><i class="ti ti-arrow-left"></i> Colaboradores</button>
+            <div><div class="page-title">Maria Pereira</div><div class="page-sub">Op. de Máquinas · Queima · Matrícula 00091203</div></div>
+          </div>
+          <span class="pill pill-y" style="font-size:12px;padding:5px 14px">Pendente</span>
+        </div>
+        <div class="detail-layout">
+          <div class="detail-main">
+            <div class="info-box info-y">⏳ Solicitação de inclusão de dependente <b>pendente de aprovação</b>. Verifique a aba Solicitações.</div>
+            <div class="section-title">DADOS DO VÍNCULO</div>
+            <div class="info-rows">
+              <div class="info-row"><span class="info-l">Turno</span><span class="info-v">Turno B (14h–22h)</span></div>
+              <div class="info-row"><span class="info-l">Admissão</span><span class="info-v">02/11/2023</span></div>
+              <div class="info-row"><span class="info-l">Regime</span><span class="info-v">CLT</span></div>
+              <div class="info-row"><span class="info-l">Dependentes</span><span class="info-v">0 cadastrado</span></div>
+            </div>
+          </div>
+          <div class="detail-side">
+            <div class="card card-body">
+              <button class="btn-primary" style="width:100%;margin-bottom:8px" onclick="go('sol-detalhe')"><i class="ti ti-mail"></i> Ver solicitação pendente</button>
+              <button class="btn-secondary" style="width:100%" onclick="go('colaboradores')"><i class="ti ti-arrow-left"></i> Voltar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMP DETAIL: ANTÔNIO -->
+      <div class="view" id="vw-emp-antonio">
+        <div class="page-h">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn-secondary" onclick="go('colaboradores')" style="padding:7px 12px"><i class="ti ti-arrow-left"></i> Colaboradores</button>
+            <div><div class="page-title">Antônio Ferreira</div><div class="page-sub">Manut. Mecânico · Manutenção · Matrícula 00087445</div></div>
+          </div>
+          <span class="pill pill-g" style="font-size:12px;padding:5px 14px">Ativo</span>
+        </div>
+        <div class="info-rows" style="max-width:600px">
+          <div class="info-row"><span class="info-l">Turno</span><span class="info-v">Turno A (06h–14h)</span></div>
+          <div class="info-row"><span class="info-l">Admissão</span><span class="info-v">08/07/2021</span></div>
+          <div class="info-row"><span class="info-l">Dependentes</span><span class="info-v">2 cadastrados</span></div>
+          <div class="info-row"><span class="info-l">Benefícios</span><span class="info-v">🚌🍽️🏥🦷🛒⚠️ (6 ativos)</span></div>
+        </div>
+        <button class="btn-secondary" onclick="go('colaboradores')" style="margin-top:14px"><i class="ti ti-arrow-left"></i> Voltar</button>
+      </div>
+
+      <!-- EMP DETAIL: CLÁUDIA -->
+      <div class="view" id="vw-emp-claudia">
+        <div class="page-h">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn-secondary" onclick="go('colaboradores')" style="padding:7px 12px"><i class="ti ti-arrow-left"></i> Colaboradores</button>
+            <div><div class="page-title">Cláudia Carvalho</div><div class="page-sub">Analista Qualidade · ADM · Matrícula 00094501</div></div>
+          </div>
+          <span class="pill pill-g" style="font-size:12px;padding:5px 14px">Ativo</span>
+        </div>
+        <div class="info-box info-b" style="max-width:600px">ℹ️ Colaboradora do setor administrativo. <b>Sem fretado</b> por opção própria (usa transporte particular).</div>
+        <div class="info-rows" style="max-width:600px">
+          <div class="info-row"><span class="info-l">Turno</span><span class="info-v">Comercial</span></div>
+          <div class="info-row"><span class="info-l">Admissão</span><span class="info-v">15/01/2025</span></div>
+          <div class="info-row"><span class="info-l">Benefícios</span><span class="info-v">🍽️🏥🦷🛒 (4 ativos)</span></div>
+        </div>
+        <button class="btn-secondary" onclick="go('colaboradores')" style="margin-top:14px"><i class="ti ti-arrow-left"></i> Voltar</button>
+      </div>
+
+      <!-- CADASTRO: BUSCA -->
+      <div class="view" id="vw-cad-busca">
+        <div class="page-h">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn-secondary" onclick="go('colaboradores')" style="padding:7px 12px"><i class="ti ti-arrow-left"></i> Colaboradores</button>
+            <div><div class="page-title">Cadastrar Colaborador</div><div class="page-sub">Etapa 1 de 2 · Buscar na Folha de Pagamento</div></div>
+          </div>
+        </div>
+        <div class="steps-bar">
+          <div class="step-i"><div class="step-circle active">1</div><div class="step-lbl active">Buscar matrícula</div></div>
+          <div class="step-line"></div>
+          <div class="step-i"><div class="step-circle">2</div><div class="step-lbl">Revisar e confirmar</div></div>
+          <div class="step-line"></div>
+          <div class="step-i"><div class="step-circle">3</div><div class="step-lbl">Cadastro concluído</div></div>
+        </div>
+        <div style="max-width:540px">
+          <div class="card card-body" style="margin-bottom:14px">
+            <div style="font-size:13px;font-weight:600;color:#1A2840;margin-bottom:5px">Buscar na Folha de Pagamento</div>
+            <div style="font-size:12px;color:#6A7E9E;margin-bottom:18px;line-height:1.5">Digite a matrícula do colaborador. Os dados serão importados automaticamente do sistema da folha — sem necessidade de redigitar nada.</div>
+            <div class="form-group">
+              <label class="form-label">MATRÍCULA DO COLABORADOR</label>
+              <input class="form-input" id="cad-mat" placeholder="Ex: 00143205" value="00143205"/>
+              <div style="font-size:11px;color:#8A9EB8;margin-top:5px">A matrícula deve estar cadastrada no sistema de folha de pagamento antes do cadastro aqui.</div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn-primary" onclick="cadBuscar()"><i class="ti ti-database-search"></i> Buscar na Folha</button>
+              <button class="btn-secondary" onclick="go('colaboradores')">Cancelar</button>
+            </div>
+            <div class="loading-row" id="cad-load" style="display:none;margin-top:14px"><div class="spin"></div> Consultando folha de pagamento...</div>
+            <div class="err-box" id="cad-err" style="margin-top:14px"><span>⚠️</span><div><b>Matrícula não encontrada.</b> Cadastre o colaborador na folha de pagamento primeiro.</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Consultas recentes</span></div>
+            <table class="data-table">
+              <tbody>
+                <tr onclick="go('cad-revisao')" style="cursor:pointer"><td><b>Lucas Oliveira</b></td><td>Analista de Marketing</td><td style="font-family:monospace;color:#8A9EB8">00143205</td><td><span class="pill pill-b">Hoje</span></td></tr>
+                <tr><td><b>Rafael Santos</b></td><td>Aux. de Produção</td><td style="font-family:monospace;color:#8A9EB8">00143180</td><td><span class="pill" style="background:#F4F6F9;color:#5A6E8A">Ontem</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CADASTRO: REVISÃO -->
+      <div class="view" id="vw-cad-revisao">
+        <div class="page-h">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn-secondary" onclick="go('cad-busca')" style="padding:7px 12px"><i class="ti ti-arrow-left"></i> Voltar</button>
+            <div><div class="page-title">Revisar e Confirmar</div><div class="page-sub">Etapa 2 de 2 · Dados importados da Folha</div></div>
+          </div>
+        </div>
+        <div class="steps-bar">
+          <div class="step-i"><div class="step-circle done">✓</div><div class="step-lbl done">Buscar matrícula</div></div>
+          <div class="step-line done"></div>
+          <div class="step-i"><div class="step-circle active">2</div><div class="step-lbl active">Revisar e confirmar</div></div>
+          <div class="step-line"></div>
+          <div class="step-i"><div class="step-circle">3</div><div class="step-lbl">Cadastro concluído</div></div>
+        </div>
+        <div class="detail-layout">
+          <div>
+            <div class="info-box info-g" style="margin-bottom:14px">✓ Dados encontrados e importados da <b>Folha de Pagamento</b> · sincronizado agora</div>
+            <div class="section-title">DADOS IMPORTADOS</div>
+            <div class="info-rows" style="margin-bottom:18px">
+              <div class="info-row"><span class="info-l">Nome</span><span class="info-v">Lucas Oliveira</span></div>
+              <div class="info-row"><span class="info-l">Matrícula</span><span class="info-v" style="font-family:monospace">00143205</span></div>
+              <div class="info-row"><span class="info-l">Cargo</span><span class="info-v">Analista de Marketing</span></div>
+              <div class="info-row"><span class="info-l">Departamento</span><span class="info-v">Marketing</span></div>
+              <div class="info-row"><span class="info-l">Salário base</span><span class="info-v">R$ 4.800,00</span></div>
+              <div class="info-row"><span class="info-l">Data de admissão</span><span class="info-v">18/05/2026</span></div>
+              <div class="info-row"><span class="info-l">Regime</span><span class="info-v">CLT · Tempo integral</span></div>
+            </div>
+            <div class="section-title">BENEFÍCIOS SUGERIDOS PELO CARGO</div>
+            <div class="info-box info-b" style="margin-bottom:12px">💡 Sugestões baseadas no cargo <b>Analista de Marketing</b>. Ative ou desative exceções conforme necessário.</div>
+            <div class="ben-toggle on" id="bt-saude" onclick="togBen('bt-saude')"><div class="ben-toggle-ico" style="background:#FFEEF2">🏥</div><div class="ben-toggle-info"><div class="ben-toggle-name">Plano de Saúde <span class="auto-tag">✓ auto</span></div><div class="ben-toggle-sub">Hapvida NotreDame</div></div><div class="toggle-sw"></div></div>
+            <div class="ben-toggle on" id="bt-odonto" onclick="togBen('bt-odonto')"><div class="ben-toggle-ico" style="background:#EDF2FF">🦷</div><div class="ben-toggle-info"><div class="ben-toggle-name">Odontológico <span class="auto-tag">✓ auto</span></div><div class="ben-toggle-sub">OdontoPrev Empresarial</div></div><div class="toggle-sw"></div></div>
+            <div class="ben-toggle" id="bt-fret" onclick="togBenExc('bt-fret','exc-fret')"><div class="ben-toggle-ico" style="background:#E8F5FF">🚌</div><div class="ben-toggle-info"><div class="ben-toggle-name">Transporte Fretado <span class="exc-tag">Não previsto</span></div><div class="ben-toggle-sub">Cargo ADM normalmente não tem fretado</div></div><div class="toggle-sw"></div></div>
+            <div class="exc-box" id="exc-fret">⚠️ <div><b>Exceção registrada.</b> Este cargo não tem fretado por padrão. Registre a justificativa na ficha do colaborador.</div></div>
+            <div class="ben-toggle on" id="bt-refeito" onclick="togBen('bt-refeito')"><div class="ben-toggle-ico" style="background:#FFF3E0">🍽️</div><div class="ben-toggle-info"><div class="ben-toggle-name">Refeitório <span class="auto-tag">✓ auto</span></div><div class="ben-toggle-sub">Refeição gratuita no local</div></div><div class="toggle-sw"></div></div>
+            <div class="ben-toggle on" id="bt-va" onclick="togBen('bt-va')"><div class="ben-toggle-ico" style="background:#EDE5F7">🛒</div><div class="ben-toggle-info"><div class="ben-toggle-name">Vale Alimentação <span class="auto-tag">✓ auto</span></div><div class="ben-toggle-sub">Ticket · R$ 500/mês</div></div><div class="toggle-sw"></div></div>
+            <div class="ben-toggle" id="bt-insalub" onclick="togBenExc('bt-insalub','exc-insalub')"><div class="ben-toggle-ico" style="background:#FDE8E8">⚠️</div><div class="ben-toggle-info"><div class="ben-toggle-name">Insalubridade <span class="exc-tag">Não aplicável</span></div><div class="ben-toggle-sub">Cargo ADM sem exposição a agentes nocivos</div></div><div class="toggle-sw"></div></div>
+            <div class="exc-box" id="exc-insalub">⚠️ <div><b>Atenção:</b> Insalubridade requer laudo LTCAT para cargo administrativo. Confirme com o SESMT.</div></div>
+            <div style="height:14px"></div>
+            <div style="display:flex;gap:10px">
+              <button class="btn-primary" onclick="go('cad-ok')"><i class="ti ti-check"></i> Confirmar cadastro</button>
+              <button class="btn-secondary" onclick="go('cad-busca')"><i class="ti ti-arrow-left"></i> Voltar</button>
+            </div>
+          </div>
+          <div>
+            <div class="card card-body">
+              <div style="font-size:11px;color:#5A6E8A;font-weight:600;letter-spacing:.4px;margin-bottom:10px">RESUMO DO CADASTRO</div>
+              <div style="font-size:12px;color:#1A2840;margin-bottom:6px"><b>Lucas Oliveira</b></div>
+              <div style="font-size:11px;color:#6A7E9E;margin-bottom:14px">Analista de Marketing · 00143205</div>
+              <div class="info-box info-g" style="font-size:11.5px">✓ 4 benefícios ativos serão vinculados ao confirmar. O acesso ao app do colaborador será liberado imediatamente.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CADASTRO: SUCESSO -->
+      <div class="view" id="vw-cad-ok">
+        <div class="success-page">
+          <div class="success-ico">✅</div>
+          <div class="success-title">Lucas Oliveira cadastrado!</div>
+          <div class="success-sub">O colaborador foi cadastrado com sucesso e o acesso ao app BenefiClear foi liberado imediatamente.</div>
+          <div class="success-code">Matrícula 00143205</div>
+          <div style="display:flex;gap:10px">
+            <button class="btn-primary" onclick="go('colaboradores')"><i class="ti ti-users"></i> Ver colaboradores</button>
+            <button class="btn-secondary" onclick="go('cad-busca')"><i class="ti ti-plus"></i> Cadastrar outro</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFÍCIOS -->
+      <div class="view" id="vw-beneficios">
+        <div class="page-h">
+          <div><div class="page-title">Benefícios Ativos</div><div class="page-sub">8 tipos ofertados pela Cerbras · Custo total estimado: R$ 1.07M/mês</div></div>
+          <button class="btn-primary"><i class="ti ti-plus"></i> Adicionar benefício</button>
+        </div>
+        <div class="ben-catalog">
+          <div class="ben-cat-card">
+            <div class="ben-cat-top"><div style="display:flex;align-items:center;gap:10px"><div class="ben-cat-ico" style="background:#FFF3E0">🍽️</div><div><div class="ben-cat-n">Refeitório</div><div class="ben-cat-p">Gratuito · Bloco C</div></div></div><span class="pill pill-g">Ativo</span></div>
+            <div class="ben-stats"><div class="ben-st"><div class="ben-st-l">VINCULADOS</div><div class="ben-st-v">1.247</div></div><div class="ben-st"><div class="ben-st-l">ADESÃO</div><div class="ben-st-v">100%</div></div><div class="ben-st"><div class="ben-st-l">CUSTO/MÊS</div><div class="ben-st-v">R$ 210k</div></div></div>
+          </div>
+          <div class="ben-cat-card">
+            <div class="ben-cat-top"><div style="display:flex;align-items:center;gap:10px"><div class="ben-cat-ico" style="background:#FFEEF2">🏥</div><div><div class="ben-cat-n">Plano de Saúde</div><div class="ben-cat-p">Hapvida NotreDame</div></div></div><span class="pill pill-g">Ativo</span></div>
+            <div class="ben-stats"><div class="ben-st"><div class="ben-st-l">VINCULADOS</div><div class="ben-st-v">1.197</div></div><div class="ben-st"><div class="ben-st-l">ADESÃO</div><div class="ben-st-v">96%</div></div><div class="ben-st"><div class="ben-st-l">CUSTO/MÊS</div><div class="ben-st-v">R$ 178k</div></div></div>
+          </div>
+          <div class="ben-cat-card">
+            <div class="ben-cat-top"><div style="display:flex;align-items:center;gap:10px"><div class="ben-cat-ico" style="background:#E8F5FF">🚌</div><div><div class="ben-cat-n">Transporte Fretado</div><div class="ben-cat-p">6 rotas · Frota própria</div></div></div><span class="pill pill-g">Ativo</span></div>
+            <div class="ben-stats"><div class="ben-st"><div class="ben-st-l">VINCULADOS</div><div class="ben-st-v">1.023</div></div><div class="ben-st"><div class="ben-st-l">ROTAS</div><div class="ben-st-v">6</div></div><div class="ben-st"><div class="ben-st-l">CUSTO/MÊS</div><div class="ben-st-v">R$ 82k</div></div></div>
+          </div>
+          <div class="ben-cat-card">
+            <div class="ben-cat-top"><div style="display:flex;align-items:center;gap:10px"><div class="ben-cat-ico" style="background:#EDE5F7">🛒</div><div><div class="ben-cat-n">Vale Alimentação</div><div class="ben-cat-p">Ticket · R$ 500/mês</div></div></div><span class="pill pill-g">Ativo</span></div>
+            <div class="ben-stats"><div class="ben-st"><div class="ben-st-l">VINCULADOS</div><div class="ben-st-v">1.134</div></div><div class="ben-st"><div class="ben-st-l">ADESÃO</div><div class="ben-st-v">91%</div></div><div class="ben-st"><div class="ben-st-l">CUSTO/MÊS</div><div class="ben-st-v">R$ 567k</div></div></div>
+          </div>
+          <div class="ben-cat-card">
+            <div class="ben-cat-top"><div style="display:flex;align-items:center;gap:10px"><div class="ben-cat-ico" style="background:#EDF2FF">🦷</div><div><div class="ben-cat-n">Plano Odontológico</div><div class="ben-cat-p">OdontoPrev</div></div></div><span class="pill pill-g">Ativo</span></div>
+            <div class="ben-stats"><div class="ben-st"><div class="ben-st-l">VINCULADOS</div><div class="ben-st-v">973</div></div><div class="ben-st"><div class="ben-st-l">ADESÃO</div><div class="ben-st-v">78%</div></div><div class="ben-st"><div class="ben-st-l">CUSTO/MÊS</div><div class="ben-st-v">R$ 24k</div></div></div>
+          </div>
+          <div class="ben-cat-card">
+            <div class="ben-cat-top"><div style="display:flex;align-items:center;gap:10px"><div class="ben-cat-ico" style="background:#FFF8E1">💰</div><div><div class="ben-cat-n">PLR</div><div class="ben-cat-p">Anual · Abr/26</div></div></div><span class="pill pill-y">Em apuração</span></div>
+            <div class="ben-stats"><div class="ben-st"><div class="ben-st-l">ELEGÍVEIS</div><div class="ben-st-v">1.189</div></div><div class="ben-st"><div class="ben-st-l">META GERAL</div><div class="ben-st-v">92%</div></div><div class="ben-st"><div class="ben-st-l">ESTIMATIVA</div><div class="ben-st-v">R$ 5.8M</div></div></div>
+          </div>
+          <div class="ben-cat-card">
+            <div class="ben-cat-top"><div style="display:flex;align-items:center;gap:10px"><div class="ben-cat-ico" style="background:#FDE8E8">⚠️</div><div><div class="ben-cat-n">Insalubridade</div><div class="ben-cat-p">Grau Médio 20% · LTCAT 2025</div></div></div><span class="pill pill-g">Ativo</span></div>
+            <div class="ben-stats"><div class="ben-st"><div class="ben-st-l">VINCULADOS</div><div class="ben-st-v">848</div></div><div class="ben-st"><div class="ben-st-l">ADESÃO</div><div class="ben-st-v">68%</div></div><div class="ben-st"><div class="ben-st-l">CUSTO/MÊS</div><div class="ben-st-v">R$ 239k</div></div></div>
+          </div>
+          <div class="ben-cat-card">
+            <div class="ben-cat-top"><div style="display:flex;align-items:center;gap:10px"><div class="ben-cat-ico" style="background:#E8F5EE">🏺</div><div><div class="ben-cat-n">Desconto Cerbras</div><div class="ben-cat-p">15% em produtos · Loja fábrica</div></div></div><span class="pill pill-g">Ativo</span></div>
+            <div class="ben-stats"><div class="ben-st"><div class="ben-st-l">ELEGÍVEIS</div><div class="ben-st-v">1.247</div></div><div class="ben-st"><div class="ben-st-l">TIPO</div><div class="ben-st-v">Interno</div></div><div class="ben-st"><div class="ben-st-l">CUSTO</div><div class="ben-st-v">—</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOLICITAÇÕES -->
+      <div class="view" id="vw-solicitacoes">
+        <div class="page-h">
+          <div><div class="page-title">Solicitações</div><div class="page-sub">23 abertas · 7 urgentes</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-secondary"><i class="ti ti-filter"></i> Filtrar</button>
+            <button class="btn-secondary"><i class="ti ti-download"></i> Exportar</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Pendentes de aprovação</span>
+            <span class="pill pill-y">7 urgentes</span>
+          </div>
+          <div class="sol-row" style="font-size:10.5px;font-weight:600;color:#5A6E8A;letter-spacing:.4px;background:#F4F6F9;cursor:default">
+            <div>COLABORADOR</div><div>TIPO</div><div>DESCRIÇÃO</div><div>AÇÃO</div>
+          </div>
+          <div class="sol-row" onclick="go('sol-detalhe')">
+            <div class="sol-who"><div class="sol-av" style="background:#1A6840">MP</div><div><div style="font-weight:500;color:#1A2840">Maria Pereira <span class="pill pill-r" style="font-size:9px;margin-left:4px">Urgente</span></div><div style="font-size:11px;color:#8A9EB8">00091203 · há 3 min</div></div></div>
+            <div><span class="pill pill-b">Plano Saúde</span></div>
+            <div class="sol-desc">Inclusão de dependente: <b>João Pedro</b> (filho, 15 dias)</div>
+            <div class="sol-actions" onclick="event.stopPropagation()"><button class="btn-success" onclick="aprovar(this)"><i class="ti ti-check"></i> Aprovar</button><button class="btn-danger" onclick="negar(this)"><i class="ti ti-x"></i> Negar</button></div>
+          </div>
+          <div class="sol-row">
+            <div class="sol-who"><div class="sol-av" style="background:#9A6610">AF</div><div><div style="font-weight:500;color:#1A2840">Antônio Ferreira</div><div style="font-size:11px;color:#8A9EB8">00087445 · há 28 min</div></div></div>
+            <div><span class="pill" style="background:#E8F5FF;color:#1F4E78">Fretado</span></div>
+            <div class="sol-desc">Troca da <b>Rota 3</b> para <b>Rota 7 (Parangaba)</b> a partir de 01/07</div>
+            <div class="sol-actions"><button class="btn-success" onclick="aprovar(this)"><i class="ti ti-check"></i> Aprovar</button><button class="btn-danger" onclick="negar(this)"><i class="ti ti-x"></i> Negar</button></div>
+          </div>
+          <div class="sol-row">
+            <div class="sol-who"><div class="sol-av" style="background:#553C7E">CC</div><div><div style="font-weight:500;color:#1A2840">Cláudia Carvalho</div><div style="font-size:11px;color:#8A9EB8">00094501 · há 2h</div></div></div>
+            <div><span class="pill" style="background:#EDE5F7;color:#553C7E">Vale Alim.</span></div>
+            <div class="sol-desc">Aumento do VA de <b>R$ 500</b> para <b>R$ 700</b> — mudança de categoria</div>
+            <div class="sol-actions"><button class="btn-success" onclick="aprovar(this)"><i class="ti ti-check"></i> Aprovar</button><button class="btn-danger" onclick="negar(this)"><i class="ti ti-x"></i> Negar</button></div>
+          </div>
+          <div class="sol-row" style="background:#FAFBF8">
+            <div class="sol-who"><div class="sol-av" style="background:#1A6840">🤖</div><div><div style="font-weight:500;color:#1A2840">IA · Alerta preditivo</div><div style="font-size:11px;color:#8A9EB8">análise contínua</div></div></div>
+            <div><span class="pill" style="background:#D4EDE0;color:#1A6840">IA Insight</span></div>
+            <div class="sol-desc">214 colaboradores com <b>VA subutilizado</b> nos últimos 60 dias. Ação sugerida: campanha.</div>
+            <div class="sol-actions"><button class="btn-success" onclick="go('ia')">📊 Ver análise</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOL DETALHE -->
+      <div class="view" id="vw-sol-detalhe">
+        <div class="page-h">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn-secondary" onclick="go('solicitacoes')" style="padding:7px 12px"><i class="ti ti-arrow-left"></i> Solicitações</button>
+            <div><div class="page-title">Solicitação #2026-004821</div><div class="page-sub">Inclusão de Dependente · Plano de Saúde</div></div>
+          </div>
+          <span class="pill pill-r" style="font-size:12px;padding:5px 14px">Urgente</span>
+        </div>
+        <div class="detail-layout">
+          <div>
+            <div class="section-title">DADOS DA SOLICITAÇÃO</div>
+            <div class="info-rows" style="margin-bottom:14px">
+              <div class="info-row"><span class="info-l">Colaborador</span><span class="info-v">Maria Pereira</span></div>
+              <div class="info-row"><span class="info-l">Matrícula</span><span class="info-v" style="font-family:monospace">00091203</span></div>
+              <div class="info-row"><span class="info-l">Tipo</span><span class="info-v">Inclusão de dependente</span></div>
+              <div class="info-row"><span class="info-l">Benefício</span><span class="info-v">Plano de Saúde · Hapvida</span></div>
+            </div>
+            <div class="section-title">DADOS DO DEPENDENTE</div>
+            <div class="info-rows" style="margin-bottom:14px">
+              <div class="info-row"><span class="info-l">Nome</span><span class="info-v">João Pedro Pereira</span></div>
+              <div class="info-row"><span class="info-l">Parentesco</span><span class="info-v">Filho</span></div>
+              <div class="info-row"><span class="info-l">Data de nascimento</span><span class="info-v">19/05/2026 (15 dias)</span></div>
+              <div class="info-row"><span class="info-l">CPF</span><span class="info-v">123.456.789-00</span></div>
+            </div>
+            <div class="info-box info-b">ℹ️ A inclusão de filho recém-nascido tem prazo de <b>30 dias</b> após o nascimento para manutenção da cobertura (Lei 9.656/98). A solicitação está dentro do prazo legal.</div>
+            <div style="display:flex;gap:10px;margin-top:16px">
+              <button class="btn-success" style="padding:12px 24px;font-size:13px" onclick="go('sol-ok')"><i class="ti ti-check"></i> Aprovar inclusão</button>
+              <button class="btn-danger" style="padding:12px 24px;font-size:13px" onclick="go('solicitacoes')"><i class="ti ti-x"></i> Negar solicitação</button>
+              <button class="btn-secondary" onclick="go('solicitacoes')">Cancelar</button>
+            </div>
+          </div>
+          <div>
+            <div class="card card-body">
+              <div style="font-size:11px;color:#5A6E8A;font-weight:600;letter-spacing:.4px;margin-bottom:10px">COLABORADORA</div>
+              <div style="font-size:13px;font-weight:600;color:#1A2840;margin-bottom:3px">Maria Pereira</div>
+              <div style="font-size:11px;color:#6A7E9E">Op. de Máquinas · Turno B</div>
+              <div style="font-size:11px;color:#6A7E9E;font-family:monospace;margin-top:2px">00091203</div>
+              <div style="margin-top:12px;padding-top:12px;border-top:.5px solid #E8EFF5">
+                <div style="font-size:11px;color:#5A6E8A;margin-bottom:6px">Dependentes atuais</div>
+                <div style="font-size:12px;color:#8A9EB8">Nenhum cadastrado</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOL SUCESSO -->
+      <div class="view" id="vw-sol-ok">
+        <div class="success-page">
+          <div class="success-ico">✅</div>
+          <div class="success-title">Aprovado com sucesso!</div>
+          <div class="success-sub">A inclusão do dependente João Pedro foi aprovada. A Hapvida NotreDame foi notificada automaticamente. Maria Pereira receberá uma confirmação no app.</div>
+          <div class="success-code">#2026-004821 · Aprovado</div>
+          <div style="display:flex;gap:10px">
+            <button class="btn-primary" onclick="go('solicitacoes')"><i class="ti ti-mail"></i> Ver outras solicitações</button>
+            <button class="btn-secondary" onclick="go('dashboard')"><i class="ti ti-home"></i> Ir para Dashboard</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANÁLISE IA -->
+      <div class="view" id="vw-ia">
+        <div class="page-h">
+          <div><div class="page-title">Análise IA</div><div class="page-sub">Insights gerados automaticamente · atualizado hoje</div></div>
+          <span class="pill" style="background:#D4EDE0;color:#1A6840;font-size:12px;padding:5px 14px">3 oportunidades esta semana</span>
+        </div>
+        <div class="ia-hero">
+          <div class="ia-icon">🤖</div>
+          <div>
+            <div style="font-size:16px;font-weight:700;margin-bottom:4px">Assistente IA Cerbras</div>
+            <div style="font-size:12.5px;opacity:.9;line-height:1.5">A IA analisou padrões de uso de benefícios, absenteísmo, turnover e comportamento do chatbot para gerar insights estratégicos para o RH.</div>
+          </div>
+        </div>
+        <div class="ia-grid">
+          <div class="ia-card warn">
+            <div class="ia-tag w">⚠️ ECONOMIA POTENCIAL</div>
+            <div class="ia-title">Vale Alimentação subutilizado</div>
+            <div class="ia-text"><b>214 colaboradores</b> com uso do VA abaixo de 20% nos últimos 60 dias. Campanha informativa pode aumentar o uso e satisfação. Economia estimada se houver opt-out: <b>R$ 21.400/mês</b>.</div>
+          </div>
+          <div class="ia-card good">
+            <div class="ia-tag g">✓ OPORTUNIDADE</div>
+            <div class="ia-title">Renegociar contrato Odonto</div>
+            <div class="ia-text">Adesão ao plano odontológico cresceu <b>+24% em 3 meses</b> (de 620 para 973 colaboradores). Momento ideal para renegociar com a OdontoPrev por volume maior e conseguir melhor tarifa.</div>
+          </div>
+          <div class="ia-card">
+            <div class="ia-tag d">💡 PREVISÃO</div>
+            <div class="ia-title">Pico de solicitações em julho</div>
+            <div class="ia-text">Com base em sazonalidade histórica (2023–2025), projeção de <b>+40% em solicitações</b> em julho — período pós-PLR e férias escolares. Recomendado reforçar equipe de RH ou ativar automação no chatbot.</div>
+          </div>
+          <div class="ia-card danger">
+            <div class="ia-tag r">🚨 ALERTA</div>
+            <div class="ia-title">Absenteísmo Turno C em alta</div>
+            <div class="ia-text">Absenteísmo do Turno C subiu de 3.1% para <b>5.8%</b> em maio (+87%). Padrão concentrado no setor de Queima. IA sugere entrevista de clima com o setor e revisão da escala.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const views={
+  dashboard:'vw-dashboard',colaboradores:'vw-colaboradores',
+  'emp-jose':'vw-emp-jose','emp-maria':'vw-emp-maria','emp-antonio':'vw-emp-antonio','emp-claudia':'vw-emp-claudia',
+  'cad-busca':'vw-cad-busca','cad-revisao':'vw-cad-revisao','cad-ok':'vw-cad-ok',
+  beneficios:'vw-beneficios',
+  solicitacoes:'vw-solicitacoes','sol-detalhe':'vw-sol-detalhe','sol-ok':'vw-sol-ok',
+  ia:'vw-ia',
+};
+const breadcrumbs={
+  dashboard:'Dashboard',colaboradores:'Colaboradores',
+  'emp-jose':'Colaboradores / José Silva','emp-maria':'Colaboradores / Maria Pereira',
+  'emp-antonio':'Colaboradores / Antônio Ferreira','emp-claudia':'Colaboradores / Cláudia Carvalho',
+  'cad-busca':'Colaboradores / Cadastrar','cad-revisao':'Colaboradores / Cadastrar / Revisar','cad-ok':'Colaboradores / Cadastro Concluído',
+  beneficios:'Benefícios',
+  solicitacoes:'Solicitações','sol-detalhe':'Solicitações / Detalhe','sol-ok':'Solicitações / Aprovação',
+  ia:'Análise IA',
+};
+const sbMap={
+  dashboard:'sb-dashboard',colaboradores:'sb-colaboradores','emp-jose':'sb-colaboradores',
+  'emp-maria':'sb-colaboradores','emp-antonio':'sb-colaboradores','emp-claudia':'sb-colaboradores',
+  'cad-busca':'sb-colaboradores','cad-revisao':'sb-colaboradores','cad-ok':'sb-colaboradores',
+  beneficios:'sb-beneficios',solicitacoes:'sb-solicitacoes','sol-detalhe':'sb-solicitacoes','sol-ok':'sb-solicitacoes',
+  ia:'sb-ia',
+};
+function go(k){
+  if(k==='login'){
+    document.getElementById('login-overlay').classList.remove('hidden');
+    return;
+  }
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('active'));
+  const id=views[k];
+  if(id){
+    document.getElementById(id).classList.add('on');
+    document.getElementById(id).scrollIntoView?null:null;
+    const sb=document.getElementById(sbMap[k]);
+    if(sb) sb.classList.add('active');
+    const bc=document.getElementById('breadcrumb');
+    if(bc){
+      const label=breadcrumbs[k]||k;
+      const parts=label.split('/');
+      if(parts.length===1) bc.innerHTML=`<span>Cerbras</span><i class="ti ti-chevron-right" style="font-size:12px"></i><b>${parts[0]}</b>`;
+      else bc.innerHTML=`<span>Cerbras</span><i class="ti ti-chevron-right" style="font-size:12px"></i><span style="cursor:pointer" onclick="go('${parts[0].trim().toLowerCase()}')">${parts[0].trim()}</span><i class="ti ti-chevron-right" style="font-size:12px"></i><b>${parts[parts.length-1].trim()}</b>`;
+    }
+    const content=document.querySelector('.content');
+    if(content) content.scrollTop=0;
+  }
+}
+function doLogin(){
+  document.getElementById('login-overlay').classList.add('hidden');
+  go('dashboard');
+}
+function cadBuscar(){
+  const v=document.getElementById('cad-mat').value.trim();
+  const load=document.getElementById('cad-load');
+  const err=document.getElementById('cad-err');
+  err.classList.remove('show');
+  load.style.display='flex';
+  document.getElementById('cad-mat').style.borderColor='';
+  setTimeout(()=>{
+    load.style.display='none';
+    if(!v||v.length<5||v==='99999'){
+      err.classList.add('show');
+      document.getElementById('cad-mat').style.borderColor='#C03A3A';
+    } else go('cad-revisao');
+  },900);
+}
+function togBen(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('on');
+}
+function togBenExc(id,excId){
+  const el=document.getElementById(id);
+  el.classList.toggle('on');
+  document.getElementById(excId).classList.toggle('show',el.classList.contains('on'));
+}
+function aprovar(btn){
+  const row=btn.closest('.sol-row');
+  if(!row) return;
+  row.style.opacity='.4';
+  row.style.pointerEvents='none';
+  row.querySelector('.sol-actions').innerHTML='<span style="color:#1A6840;font-size:12px;font-weight:600">✓ Aprovado</span>';
+}
+function negar(btn){
+  const row=btn.closest('.sol-row');
+  if(!row) return;
+  row.style.opacity='.4';
+  row.style.pointerEvents='none';
+  row.querySelector('.sol-actions').innerHTML='<span style="color:#C03A3A;font-size:12px;font-weight:600">✕ Negado</span>';
+}
+</script>
+</body>
+</html>
+
+    </textarea>
+
+  <textarea id="code-app" style="display: none;">
+    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BenefiClear · App do Funcionário · Cerbras</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#0D1F14;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:12px}
+body::before{content:'BenefiClear · App do Funcionário · Cerbras';display:block;color:#2A5A38;font-size:11px;letter-spacing:1px}
+
+.phone{width:360px;height:720px;background:#0A0A0A;border-radius:50px;padding:10px;box-shadow:0 30px 80px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05);position:relative;flex-shrink:0}
+.notch{width:100px;height:26px;background:#0A0A0A;border-radius:0 0 16px 16px;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:200}
+.screen{width:100%;height:100%;background:#F2F6F3;border-radius:42px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+
+/* Views */
+.vw{display:none;flex-direction:column;height:100%;animation:pop .18s ease}
+.vw.on{display:flex}
+@keyframes pop{from{opacity:0;transform:scale(.99)}to{opacity:1;transform:scale(1)}}
+
+/* ── Header ── */
+.hdr{background:#1A6840;padding:34px 16px 16px;flex-shrink:0}
+.hdr.slim{padding-bottom:14px}
+.hdr-row{display:flex;align-items:center;gap:10px}
+.hdr-icon{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.hdr-n{font-size:14px;font-weight:600;color:#fff}
+.hdr-s{font-size:10px;color:rgba(255,255,255,.75);margin-top:1px}
+.hdr-r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.hdr-badge{background:rgba(255,255,255,.18);padding:3px 10px;border-radius:14px;font-size:10px;color:#fff;font-weight:500}
+.hdr-back{width:28px;height:28px;background:rgba(255,255,255,.18);border:none;border-radius:8px;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hdr-home{width:28px;height:28px;background:rgba(255,255,255,.15);border:none;border-radius:8px;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hdr-title{font-size:14px;font-weight:600;color:#fff;flex:1;margin-left:8px}
+
+/* ── Body ── */
+.body{flex:1;overflow-y:auto;padding:14px;background:#F2F6F3}
+.body::-webkit-scrollbar{width:3px}
+.body::-webkit-scrollbar-thumb{background:#C8D8C8;border-radius:3px}
+
+/* ── Bottom bar ── */
+.bbar{border-top:1px solid #E0E8E0;background:#fff;display:flex;padding:7px 0 5px;flex-shrink:0}
+.bt{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:#8A9E8E;cursor:pointer;border:none;background:none}
+.bt i{font-size:18px}
+.bt.on{color:#1A6840}
+.bt-dot{width:4px;height:4px;background:#1A6840;border-radius:50%;margin-top:1px}
+
+/* ── Cards ── */
+.card{background:#fff;border-radius:14px;border:.5px solid #DDE8E0;margin-bottom:10px}
+.card-p{padding:13px}
+.sect{font-size:10px;color:#5A7060;letter-spacing:.5px;margin:4px 0 8px}
+
+/* Profile card */
+.prof{background:linear-gradient(135deg,#1A6840 0%,#2E9960 55%,#1A5C38 100%);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.prof-av{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0;border:2px solid rgba(255,255,255,.35)}
+.prof-n{font-size:14px;font-weight:600;color:#fff}
+.prof-r{font-size:10.5px;color:rgba(255,255,255,.85);margin-top:2px}
+.prof-mat{background:rgba(255,255,255,.2);padding:2px 8px;border-radius:8px;font-size:9.5px;color:#fff;margin-top:5px;display:inline-block}
+
+/* Quick folha card */
+.quick{background:linear-gradient(135deg,#155030,#1A6840);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:12px;cursor:pointer;transition:transform .15s}
+.quick:hover{transform:translateY(-1px)}
+.quick-ico{width:44px;height:44px;background:rgba(255,255,255,.18);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.quick-l{font-size:10px;color:rgba(255,255,255,.8);letter-spacing:.4px}
+.quick-v{font-size:20px;font-weight:700;color:#fff;margin-top:2px}
+.quick-s{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px}
+.quick-arr{margin-left:auto;color:rgba(255,255,255,.6);font-size:20px}
+
+/* Benefit grid */
+.ben-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.bc{background:#fff;border-radius:13px;padding:12px 11px;cursor:pointer;border:.5px solid #DDE8E0;transition:all .15s}
+.bc:hover{border-color:#1A6840;transform:translateY(-1px)}
+.bc-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:8px}
+.bc-n{font-size:11.5px;font-weight:600;color:#1A2820}
+.bc-s{font-size:10px;color:#6A7E70;margin-top:2px}
+.bc-pil{display:inline-block;padding:2px 8px;border-radius:8px;font-size:8.5px;font-weight:600;margin-top:6px}
+
+/* Detail */
+.det-h{background:#fff;border-radius:14px;padding:13px;display:flex;align-items:center;gap:12px;margin-bottom:12px;border:.5px solid #DDE8E0}
+.det-h-ico{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.det-h-n{font-size:15px;font-weight:600;color:#1A2820}
+.det-h-s{font-size:11px;color:#6A7E70;margin-top:3px}
+.det-rows{background:#fff;border-radius:13px;overflow:hidden;border:.5px solid #DDE8E0;margin-bottom:12px}
+.det-row{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:.5px solid #E8F0E8;font-size:12px}
+.det-row:last-child{border-bottom:none}
+.det-l{color:#6A7E70}
+.det-v{color:#1A2820;font-weight:600;text-align:right;max-width:55%}
+.pill-ok{background:#D4EDE0;color:#1A6840;padding:2px 10px;border-radius:8px;font-size:10px;font-weight:600}
+.info-box{background:#E8F5EE;border-radius:11px;padding:11px 13px;font-size:11.5px;color:#2A6040;line-height:1.5;margin-bottom:12px}
+.info-box b{font-weight:600;color:#1A6840}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px;transition:all .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-g{background:#1A6840;color:#fff}
+.btn-o{background:#fff;color:#3A7060;border:1.5px solid #C8D8C0}
+.btn-o:hover{border-color:#1A6840;color:#1A6840}
+
+/* Folha */
+.hol-hero{background:linear-gradient(135deg,#1A6840,#2E9960);border-radius:14px;padding:18px;margin-bottom:12px;text-align:center;position:relative;overflow:hidden}
+.hol-hero::after{content:'💰';position:absolute;right:-6px;bottom:-10px;font-size:72px;opacity:.12}
+.hol-hero-l{font-size:10px;color:rgba(255,255,255,.8);letter-spacing:.5px;margin-bottom:4px}
+.hol-hero-v{font-size:30px;font-weight:700;color:#fff;letter-spacing:-1px}
+.hol-hero-t{background:rgba(255,255,255,.18);display:inline-block;padding:3px 12px;border-radius:10px;font-size:10.5px;color:#fff;margin-top:8px}
+.month-sel{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px}
+.mon-btn{width:30px;height:30px;background:#fff;border:.5px solid #DDE8E0;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#1A6840;font-size:14px}
+.mon-c{flex:1;text-align:center;background:#fff;border:.5px solid #DDE8E0;border-radius:10px;padding:7px}
+.mon-l{font-size:9px;color:#6A7E70;letter-spacing:.4px}
+.mon-v{font-size:13px;font-weight:600;color:#1A2820;margin-top:1px}
+.hol-grp{background:#fff;border-radius:13px;border:.5px solid #DDE8E0;overflow:hidden;margin-bottom:10px}
+.hol-gh{padding:9px 13px;font-size:10.5px;font-weight:600;letter-spacing:.3px;border-bottom:.5px solid #E8F0E8;display:flex;justify-content:space-between}
+.hol-row{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;border-bottom:.5px solid #E8F0E8;font-size:12px}
+.hol-row:last-child{border-bottom:none}
+.hol-rl{color:#6A7E70;display:flex;align-items:center;gap:6px}
+.hol-tag{background:#E8F0E8;color:#5A7060;font-size:8.5px;padding:1px 5px;border-radius:5px;font-weight:600}
+.hol-pos{color:#1A6840;font-weight:600}
+.hol-neg{color:#C03A3A;font-weight:600}
+.hol-tot{background:#fff;border-radius:12px;border:.5px solid #DDE8E0;padding:13px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.hol-tot-v{font-size:20px;font-weight:700;color:#1A6840}
+
+/* Solicitar */
+.sol-opt{background:#fff;border:.5px solid #DDE8E0;border-radius:13px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:9px;cursor:pointer;transition:all .15s}
+.sol-opt:hover{border-color:#1A6840;transform:translateX(3px)}
+.sol-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sol-n{font-size:13px;font-weight:600;color:#1A2820}
+.sol-s{font-size:10.5px;color:#6A7E70;margin-top:2px}
+
+/* Forms */
+.f-grp{margin-bottom:14px}
+.f-lbl{font-size:10.5px;color:#5A7060;letter-spacing:.3px;margin-bottom:5px;display:block}
+.f-inp{width:100%;background:#fff;border:1.5px solid #DDE8E0;border-radius:10px;padding:13px 14px;font-size:14px;color:#1A2820;outline:none;transition:border-color .2s}
+.f-inp:focus{border-color:#1A6840}
+.f-sel{width:100%;background:#fff;border:1.5px solid #DDE8E0;border-radius:10px;padding:13px 14px;font-size:14px;color:#1A2820;outline:none;appearance:none}
+.rota-c{background:#fff;border:1.5px solid #DDE8E0;border-radius:12px;padding:13px;display:flex;align-items:center;gap:11px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.rota-c:hover{border-color:#1A6840}
+.rota-c.sel{border-color:#1A6840;background:#F0F8F4}
+.rn{font-size:13px;font-weight:600;color:#1A2820}
+.rs{font-size:10.5px;color:#6A7E70;margin-top:2px}
+
+/* Login */
+.l-card{background:#fff;border-radius:16px;padding:22px 18px;margin:0 4px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.l-title{font-size:18px;font-weight:600;color:#1A6840;margin-bottom:6px}
+.l-sub{font-size:12px;color:#6A7E70;line-height:1.5;margin-bottom:18px}
+.l-inp{width:100%;background:#F8FAF8;border:1.5px solid #DDE8E0;border-radius:10px;padding:13px 14px;font-size:14px;color:#1A2820;outline:none;margin-bottom:10px;transition:border-color .2s}
+.l-inp:focus{border-color:#1A6840;background:#fff}
+.l-btn{width:100%;padding:15px;background:#1A6840;border:none;color:#fff;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
+.l-btn:hover{background:#1E7848;transform:translateY(-1px)}
+.l-foot{font-size:10.5px;color:#8A9E8E;text-align:center;margin-top:12px}
+
+/* Chat */
+.chat-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px;background:#F2F6F3}
+.bub{max-width:82%;padding:10px 13px;font-size:12.5px;line-height:1.5}
+.bub.bot{background:#fff;border:.5px solid #DDE8E0;border-radius:4px 14px 14px 14px;color:#1A2820;align-self:flex-start}
+.bub.usr{background:#1A6840;color:#fff;border-radius:14px 4px 14px 14px;align-self:flex-end}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.chip{padding:6px 12px;border:1px solid #C8D8C0;border-radius:16px;font-size:11px;color:#3A7060;cursor:pointer;background:#fff;transition:all .15s}
+.chip:hover{border-color:#1A6840;color:#1A6840}
+.chat-in{background:#fff;border-top:.5px solid #DDE8E0;padding:10px 13px;display:flex;gap:8px;align-items:center;flex-shrink:0}
+.chat-inp{flex:1;height:36px;background:#F2F6F3;border:1.5px solid #DDE8E0;border-radius:20px;padding:0 14px;font-size:12.5px;outline:none;color:#1A2820}
+.chat-inp:focus{border-color:#1A6840}
+.chat-snd{width:36px;height:36px;background:#1A6840;border:none;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
+
+/* Perfil */
+.perf-hero{background:linear-gradient(135deg,#1A6840,#2E9960,#1A5C38);border-radius:16px;padding:16px;margin-bottom:14px}
+.perf-av{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:20px;border:2.5px solid rgba(255,255,255,.4);margin:0 auto 10px}
+.perf-n{font-size:16px;font-weight:600;color:#fff;text-align:center}
+.perf-r{font-size:11px;color:rgba(255,255,255,.85);text-align:center;margin-top:2px}
+.perf-mat{background:rgba(255,255,255,.2);padding:3px 12px;border-radius:10px;font-size:10px;color:#fff;display:block;width:fit-content;margin:6px auto 0}
+.perf-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.perf-stat{background:#fff;border-radius:12px;padding:10px;text-align:center;border:.5px solid #DDE8E0}
+.perf-sv{font-size:17px;font-weight:700;color:#1A6840}
+.perf-sl{font-size:9.5px;color:#6A7E70;margin-top:2px}
+.perf-block{background:#fff;border-radius:13px;border:.5px solid #DDE8E0;overflow:hidden;margin-bottom:10px}
+.perf-item{display:flex;align-items:center;padding:11px 13px;border-bottom:.5px solid #E8F0E8;cursor:pointer;gap:10px}
+.perf-item:last-child{border-bottom:none}
+.perf-item:hover{background:#F8FAF8}
+.perf-i-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.perf-i-l{font-size:10px;color:#6A7E70}
+.perf-i-v{font-size:12.5px;font-weight:500;color:#1A2820;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.perf-i-lbl{flex:1;font-size:13px;color:#1A2820}
+.perf-tog{width:36px;height:20px;background:#1A6840;border-radius:10px;position:relative;flex-shrink:0;transition:background .2s;cursor:pointer}
+.perf-tog::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;right:2px;transition:right .2s}
+.perf-tog.off{background:#D3D1C7}
+.perf-tog.off::after{right:auto;left:2px}
+.perf-logout{width:100%;padding:13px;background:#fff;border:1.5px solid #FBD6DE;color:#C03A3A;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:4px}
+
+/* Success */
+.success{text-align:center;padding:30px 20px}
+.success-ico{font-size:64px;margin-bottom:14px;display:block}
+.success-t{font-size:20px;font-weight:700;color:#1A6840;margin-bottom:8px}
+.success-s{font-size:12.5px;color:#5A7060;line-height:1.6;margin-bottom:22px}
+.success-prot{background:#D4EDE0;color:#1A6840;padding:8px 16px;border-radius:10px;font-size:12px;font-weight:600;margin-bottom:18px;display:inline-block}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="notch"></div>
+  <div class="screen">
+
+    <!-- LOGIN -->
+    <div class="vw on" id="vw-login">
+      <div class="hdr">
+        <div class="hdr-row">
+          <div class="hdr-icon"><i class="ti ti-building-factory-2" style="font-size:16px;color:#fff"></i></div>
+          <div><div class="hdr-n">BenefiClear</div><div class="hdr-s">Cerbras · Maracanaú</div></div>
+        </div>
+      </div>
+      <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="l-card">
+          <div class="l-title">Bem-vindo! 👋</div>
+          <div class="l-sub">Entre com sua matrícula para acessar seus benefícios e holerite.</div>
+          <input class="l-inp" placeholder="Matrícula" value="00089234"/>
+          <input class="l-inp" placeholder="CPF (opcional)" type="password" value="•••••"/>
+          <button class="l-btn" onclick="go('home')"><i class="ti ti-arrow-right"></i> Entrar</button>
+        </div>
+        <div class="l-foot">Seus dados são protegidos · LGPD compliant</div>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <div class="vw" id="vw-home">
+      <div class="hdr">
+        <div class="hdr-row">
+          <div class="hdr-icon"><i class="ti ti-building-factory-2" style="font-size:16px;color:#fff"></i></div>
+          <div><div class="hdr-n">BenefiClear</div><div class="hdr-s">Cerbras · Maracanaú</div></div>
+          <div class="hdr-r"><span class="hdr-badge">🏭 Turno A</span></div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="prof">
+          <div class="prof-av">JS</div>
+          <div>
+            <div class="prof-n">José Silva</div>
+            <div class="prof-r">Aux. de Produção · Esmaltação</div>
+            <div class="prof-mat">Matrícula 00089234</div>
+          </div>
+        </div>
+        <div class="quick" onclick="go('folha')">
+          <div class="quick-ico">💰</div>
+          <div>
+            <div class="quick-l">SALÁRIO LÍQUIDO · MAIO</div>
+            <div class="quick-v">R$ 3.820,00</div>
+            <div class="quick-s">Inclui R$ 782 em benefícios</div>
+          </div>
+          <i class="ti ti-chevron-right quick-arr"></i>
+        </div>
+        <div class="sect">MEUS BENEFÍCIOS (8)</div>
+        <div class="ben-grid">
+          <div class="bc" onclick="go('d-fretado')">
+            <div class="bc-ico" style="background:#E8F5FF">🚌</div>
+            <div class="bc-n">Fretado</div>
+            <div class="bc-s">Rota 3 · 05h15</div>
+            <span class="bc-pil" style="background:#D4EDE0;color:#1A6840">Ativo</span>
+          </div>
+          <div class="bc" onclick="go('d-refeito')">
+            <div class="bc-ico" style="background:#FFF3E0">🍽️</div>
+            <div class="bc-n">Refeitório</div>
+            <div class="bc-s">Gratuito · Bloco C</div>
+            <span class="bc-pil" style="background:#D4EDE0;color:#1A6840">Ativo</span>
+          </div>
+          <div class="bc" onclick="go('d-saude')">
+            <div class="bc-ico" style="background:#FFEEF2">🏥</div>
+            <div class="bc-n">Plano de Saúde</div>
+            <div class="bc-s">Hapvida · 1 dep.</div>
+            <span class="bc-pil" style="background:#D4EDE0;color:#1A6840">Ativo</span>
+          </div>
+          <div class="bc" onclick="go('d-odonto')">
+            <div class="bc-ico" style="background:#EDF2FF">🦷</div>
+            <div class="bc-n">Odontológico</div>
+            <div class="bc-s">OdontoPrev</div>
+            <span class="bc-pil" style="background:#D4EDE0;color:#1A6840">Ativo</span>
+          </div>
+          <div class="bc" onclick="go('d-va')">
+            <div class="bc-ico" style="background:#EDE5F7">🛒</div>
+            <div class="bc-n">Vale Alimentação</div>
+            <div class="bc-s">Ticket · R$ 500</div>
+            <span class="bc-pil" style="background:#D4EDE0;color:#1A6840">Ativo</span>
+          </div>
+          <div class="bc" onclick="go('d-plr')">
+            <div class="bc-ico" style="background:#FFF8E1">💰</div>
+            <div class="bc-n">PLR</div>
+            <div class="bc-s">Anual · Abr/26</div>
+            <span class="bc-pil" style="background:#FBEACB;color:#9A6610">Em apuração</span>
+          </div>
+          <div class="bc" onclick="go('d-insalub')">
+            <div class="bc-ico" style="background:#FDE8E8">⚠️</div>
+            <div class="bc-n">Insalubridade</div>
+            <div class="bc-s">Grau médio · 20%</div>
+            <span class="bc-pil" style="background:#D4EDE0;color:#1A6840">Ativo</span>
+          </div>
+          <div class="bc" onclick="go('d-desconto')">
+            <div class="bc-ico" style="background:#E8F5EE">🏺</div>
+            <div class="bc-n">Desc. Cerbras</div>
+            <div class="bc-s">15% produtos</div>
+            <span class="bc-pil" style="background:#D4EDE0;color:#1A6840">Ativo</span>
+          </div>
+        </div>
+      </div>
+      <div class="bbar">
+        <button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início<div class="bt-dot"></div></button>
+        <button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button>
+        <button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button>
+        <button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button>
+      </div>
+    </div>
+
+    <!-- DETAIL: FRETADO -->
+    <div class="vw" id="vw-d-fretado">
+      <div class="hdr slim">
+        <div class="hdr-row">
+          <button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hdr-title">Transporte Fretado</div>
+          <button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button>
+        </div>
+      </div>
+      <div class="body">
+        <div class="det-h"><div class="det-h-ico" style="background:#E8F5FF">🚌</div><div><div class="det-h-n">Rota 3 · Messejana</div><div class="det-h-s">Transporte fretado pela Cerbras</div></div></div>
+        <div class="det-rows">
+          <div class="det-row"><span class="det-l">Status</span><span class="pill-ok">Ativo</span></div>
+          <div class="det-row"><span class="det-l">Ponto de embarque</span><span class="det-v">Av. Dedé Brasil, 1420</span></div>
+          <div class="det-row"><span class="det-l">Horário ida</span><span class="det-v">05h15</span></div>
+          <div class="det-row"><span class="det-l">Horário volta</span><span class="det-v">14h30</span></div>
+          <div class="det-row"><span class="det-l">Custo para você</span><span class="det-v">Gratuito</span></div>
+          <div class="det-row"><span class="det-l">Vagas</span><span class="det-v">48 / 52</span></div>
+        </div>
+        <div class="info-box">💡 Precisa mudar de rota? Acesse <b>Solicitar</b> abaixo.</div>
+        <button class="btn btn-g" onclick="go('solicitar')"><i class="ti ti-repeat"></i> Solicitar troca de rota</button>
+        <button class="btn btn-o" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i> Tirar dúvidas com IA</button>
+      </div>
+      <div class="bbar">
+        <button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button>
+        <button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button>
+        <button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button>
+        <button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button>
+      </div>
+    </div>
+
+    <!-- DETAIL: REFEITÓRIO -->
+    <div class="vw" id="vw-d-refeito">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Refeitório</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="det-h"><div class="det-h-ico" style="background:#FFF3E0">🍽️</div><div><div class="det-h-n">Refeição no Local</div><div class="det-h-s">Refeitório Cerbras · Bloco C</div></div></div>
+        <div class="det-rows">
+          <div class="det-row"><span class="det-l">Status</span><span class="pill-ok">Ativo</span></div>
+          <div class="det-row"><span class="det-l">Custo para você</span><span class="det-v">Gratuito</span></div>
+          <div class="det-row"><span class="det-l">Turno A</span><span class="det-v">11h00 – 12h30</span></div>
+          <div class="det-row"><span class="det-l">Turno B</span><span class="det-v">18h30 – 20h00</span></div>
+          <div class="det-row"><span class="det-l">Turno C</span><span class="det-v">00h30 – 02h00</span></div>
+        </div>
+        <div class="info-box">🍛 <b>Cardápio de hoje:</b> Arroz, feijão, carne assada, frango grelhado, salada verde, suco de caju, pudim.</div>
+        <button class="btn btn-o" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i> Falar com IA</button>
+      </div>
+      <div class="bbar"><button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button><button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button><button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button><button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button></div>
+    </div>
+
+    <!-- DETAIL: SAÚDE -->
+    <div class="vw" id="vw-d-saude">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Plano de Saúde</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="det-h"><div class="det-h-ico" style="background:#FFEEF2">🏥</div><div><div class="det-h-n">Hapvida NotreDame</div><div class="det-h-s">Plano Empresarial</div></div></div>
+        <div class="det-rows">
+          <div class="det-row"><span class="det-l">Status</span><span class="pill-ok">Ativo</span></div>
+          <div class="det-row"><span class="det-l">Cobertura</span><span class="det-v">Nacional</span></div>
+          <div class="det-row"><span class="det-l">Carteirinha</span><span class="det-v">00089234-001</span></div>
+          <div class="det-row"><span class="det-l">Dependentes</span><span class="det-v">1 incluído</span></div>
+          <div class="det-row"><span class="det-l">Vigência</span><span class="det-v">Jan – Dez/2026</span></div>
+          <div class="det-row"><span class="det-l">Sua contribuição</span><span class="det-v">R$ 80,00/mês</span></div>
+        </div>
+        <div class="info-box">👶 <b>Dependente:</b> Maria Silva (cônjuge). Para incluir um novo dependente, toque abaixo.</div>
+        <button class="btn btn-g" onclick="go('sol-dep')"><i class="ti ti-user-plus"></i> Adicionar dependente</button>
+        <button class="btn btn-o" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i> Tirar dúvidas</button>
+      </div>
+      <div class="bbar"><button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button><button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button><button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button><button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button></div>
+    </div>
+
+    <!-- DETAIL: ODONTO -->
+    <div class="vw" id="vw-d-odonto">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Plano Odontológico</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="det-h"><div class="det-h-ico" style="background:#EDF2FF">🦷</div><div><div class="det-h-n">OdontoPrev</div><div class="det-h-s">Plano Empresarial Plus</div></div></div>
+        <div class="det-rows">
+          <div class="det-row"><span class="det-l">Status</span><span class="pill-ok">Ativo</span></div>
+          <div class="det-row"><span class="det-l">Carteirinha</span><span class="det-v">00089234-OD</span></div>
+          <div class="det-row"><span class="det-l">Cobertura</span><span class="det-v">Consulta, limpeza, RX</span></div>
+          <div class="det-row"><span class="det-l">Dependentes</span><span class="det-v">1 incluído</span></div>
+          <div class="det-row"><span class="det-l">Contribuição</span><span class="det-v">R$ 25,00/mês</span></div>
+        </div>
+        <div class="info-box">📍 Clínica mais próxima: <b>OdontoPrev Maracanaú</b> — R. Cel. Virgílio, 312. Aberta seg-sex 8h–18h.</div>
+        <button class="btn btn-o" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i> Tirar dúvidas</button>
+      </div>
+      <div class="bbar"><button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button><button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button><button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button><button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button></div>
+    </div>
+
+    <!-- DETAIL: VA -->
+    <div class="vw" id="vw-d-va">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Vale Alimentação</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="det-h"><div class="det-h-ico" style="background:#EDE5F7">🛒</div><div><div class="det-h-n">Vale Alimentação</div><div class="det-h-s">Ticket · Uso em supermercados</div></div></div>
+        <div class="det-rows">
+          <div class="det-row"><span class="det-l">Status</span><span class="pill-ok">Ativo</span></div>
+          <div class="det-row"><span class="det-l">Valor mensal</span><span class="det-v">R$ 500,00</span></div>
+          <div class="det-row"><span class="det-l">Cartão</span><span class="det-v">Ticket · **** 9934</span></div>
+          <div class="det-row"><span class="det-l">Crédito</span><span class="det-v">1º dia útil</span></div>
+          <div class="det-row"><span class="det-l">Uso em</span><span class="det-v">Supermercados, padarias</span></div>
+        </div>
+        <div class="info-box">⚠️ Não aceito em restaurantes. Para alimentação fora, use o VA em mercados e padarias credenciadas Ticket.</div>
+        <button class="btn btn-o" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i> Tirar dúvidas</button>
+      </div>
+      <div class="bbar"><button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button><button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button><button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button><button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button></div>
+    </div>
+
+    <!-- DETAIL: PLR -->
+    <div class="vw" id="vw-d-plr">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">PLR</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="det-h"><div class="det-h-ico" style="background:#FFF8E1">💰</div><div><div class="det-h-n">Participação nos Resultados</div><div class="det-h-s">PLR 2026 · Anual</div></div></div>
+        <div class="det-rows">
+          <div class="det-row"><span class="det-l">Previsão pagamento</span><span class="det-v">Abril/2026</span></div>
+          <div class="det-row"><span class="det-l">Elegibilidade</span><span class="det-v" style="color:#1A6840">✓ Apto</span></div>
+          <div class="det-row"><span class="det-l">Meta de produção</span><span class="det-v">92% atingida</span></div>
+          <div class="det-row"><span class="det-l">Estimativa atual</span><span class="det-v">1,8× salário base</span></div>
+          <div class="det-row"><span class="det-l">Apuração final</span><span class="det-v">Março/2026</span></div>
+        </div>
+        <div class="info-box">📊 O valor exato da PLR depende das metas globais da Cerbras e do seu tempo de casa. A apuração final sai em março.</div>
+        <button class="btn btn-o" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i> Tirar dúvidas</button>
+      </div>
+      <div class="bbar"><button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button><button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button><button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button><button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button></div>
+    </div>
+
+    <!-- DETAIL: INSALUBRIDADE -->
+    <div class="vw" id="vw-d-insalub">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Insalubridade</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="det-h"><div class="det-h-ico" style="background:#FDE8E8">⚠️</div><div><div class="det-h-n">Adicional de Insalubridade</div><div class="det-h-s">Grau Médio · Laudo LTCAT</div></div></div>
+        <div class="det-rows">
+          <div class="det-row"><span class="det-l">Status</span><span class="pill-ok">Ativo</span></div>
+          <div class="det-row"><span class="det-l">Grau</span><span class="det-v">Médio (20%)</span></div>
+          <div class="det-row"><span class="det-l">Base de cálculo</span><span class="det-v">Salário mínimo</span></div>
+          <div class="det-row"><span class="det-l">Valor atual</span><span class="det-v">R$ 282,44/mês</span></div>
+          <div class="det-row"><span class="det-l">Agente nocivo</span><span class="det-v">Poeira de sílica</span></div>
+        </div>
+        <div class="info-box">📄 Laudo LTCAT emitido em <b>jan/2025</b>. Dúvidas sobre EPIs, fale com o SESMT da Cerbras.</div>
+        <button class="btn btn-o" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i> Tirar dúvidas</button>
+      </div>
+      <div class="bbar"><button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button><button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button><button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button><button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button></div>
+    </div>
+
+    <!-- DETAIL: DESCONTO -->
+    <div class="vw" id="vw-d-desconto">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Desconto Cerbras</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="det-h"><div class="det-h-ico" style="background:#E8F5EE">🏺</div><div><div class="det-h-n">Desconto para Colaboradores</div><div class="det-h-s">15% em produtos Cerbras</div></div></div>
+        <div class="det-rows">
+          <div class="det-row"><span class="det-l">Status</span><span class="pill-ok">Ativo</span></div>
+          <div class="det-row"><span class="det-l">Desconto</span><span class="det-v">15% sobre preço de fábrica</span></div>
+          <div class="det-row"><span class="det-l">Produtos</span><span class="det-v">Pisos, azulejos, porcelanatos</span></div>
+          <div class="det-row"><span class="det-l">Como usar</span><span class="det-v">Apresentar matrícula na loja</span></div>
+          <div class="det-row"><span class="det-l">Horário loja</span><span class="det-v">Seg–Sex 12h–17h</span></div>
+        </div>
+        <div class="info-box">🏪 Loja de fábrica no <b>Bloco A</b> da unidade Maracanaú.</div>
+        <button class="btn btn-o" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i> Tirar dúvidas</button>
+      </div>
+      <div class="bbar"><button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button><button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button><button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button><button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button></div>
+    </div>
+
+    <!-- FOLHA DE PAGAMENTO -->
+    <div class="vw" id="vw-folha">
+      <div class="hdr slim">
+        <div class="hdr-row">
+          <button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hdr-title">Folha de Pagamento</div>
+          <i class="ti ti-download" style="font-size:18px;color:#fff;cursor:pointer;margin-left:auto"></i>
+        </div>
+      </div>
+      <div class="body">
+        <div class="month-sel">
+          <div class="mon-btn"><i class="ti ti-chevron-left"></i></div>
+          <div class="mon-c"><div class="mon-l">COMPETÊNCIA</div><div class="mon-v">Maio · 2026</div></div>
+          <div class="mon-btn"><i class="ti ti-chevron-right"></i></div>
+        </div>
+        <div class="hol-hero">
+          <div class="hol-hero-l">SALÁRIO LÍQUIDO</div>
+          <div class="hol-hero-v">R$ 3.820,00</div>
+          <span class="hol-hero-t">📈 +R$ 94 vs Abril</span>
+        </div>
+        <div class="info-box">🏷️ Benefícios marcados com <b>tag verde</b> são visíveis aqui — você vê exatamente como cada um impacta sua folha.</div>
+        <div class="hol-grp">
+          <div class="hol-gh" style="color:#1A6840;background:#F0F8F4"><span>+ PROVENTOS</span><span>R$ 5.114,44</span></div>
+          <div class="hol-row"><span class="hol-rl">💼 Salário base</span><span class="hol-pos">R$ 2.412,00</span></div>
+          <div class="hol-row"><span class="hol-rl">⚠️ Insalubridade <span class="hol-tag">benefício</span></span><span class="hol-pos">R$ 282,44</span></div>
+          <div class="hol-row"><span class="hol-rl">🛒 Vale Alimentação <span class="hol-tag">benefício</span></span><span class="hol-pos">R$ 500,00</span></div>
+          <div class="hol-row"><span class="hol-rl">🕐 Horas extras (8h)</span><span class="hol-pos">R$ 120,00</span></div>
+        </div>
+        <div class="hol-grp">
+          <div class="hol-gh" style="color:#C03A3A;background:#FDF2F2"><span>− DESCONTOS</span><span>R$ 1.294,44</span></div>
+          <div class="hol-row"><span class="hol-rl">🏛️ INSS</span><span class="hol-neg">− R$ 266,00</span></div>
+          <div class="hol-row"><span class="hol-rl">📋 IRRF</span><span class="hol-neg">− R$ 0,00</span></div>
+          <div class="hol-row"><span class="hol-rl">🏥 Plano Saúde <span class="hol-tag">benefício</span></span><span class="hol-neg">− R$ 80,00</span></div>
+          <div class="hol-row"><span class="hol-rl">🦷 Odonto <span class="hol-tag">benefício</span></span><span class="hol-neg">− R$ 25,00</span></div>
+        </div>
+        <div class="hol-tot">
+          <span style="font-size:13px;font-weight:600;color:#1A2820">VALOR LÍQUIDO</span>
+          <span class="hol-tot-v">R$ 3.820,00</span>
+        </div>
+      </div>
+      <div class="bbar">
+        <button class="bt" onclick="go('home')"><i class="ti ti-home"></i>Início</button>
+        <button class="bt on" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite<div class="bt-dot"></div></button>
+        <button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button>
+        <button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button>
+      </div>
+    </div>
+
+    <!-- SOLICITAR -->
+    <div class="vw" id="vw-solicitar">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Solicitar</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="sect">O QUE VOCÊ PRECISA?</div>
+        <div class="sol-opt" onclick="go('sol-dep')"><div class="sol-ico" style="background:#FFEEF2">👶</div><div><div class="sol-n">Incluir dependente</div><div class="sol-s">Adicionar familiar ao plano de saúde</div></div><i class="ti ti-chevron-right" style="margin-left:auto;color:#C8D8C0;font-size:18px"></i></div>
+        <div class="sol-opt" onclick="go('sol-rota')"><div class="sol-ico" style="background:#E8F5FF">🚌</div><div><div class="sol-n">Trocar rota do fretado</div><div class="sol-s">Mudar ponto de embarque</div></div><i class="ti ti-chevron-right" style="margin-left:auto;color:#C8D8C0;font-size:18px"></i></div>
+        <div class="sol-opt" onclick="go('suporte')"><div class="sol-ico" style="background:#EDF2FF">📄</div><div><div class="sol-n">2ª via de carteirinha</div><div class="sol-s">Plano de saúde ou odonto</div></div><i class="ti ti-chevron-right" style="margin-left:auto;color:#C8D8C0;font-size:18px"></i></div>
+        <div class="sol-opt" onclick="go('suporte')"><div class="sol-ico" style="background:#F0F8F4">❓</div><div><div class="sol-n">Outra solicitação</div><div class="sol-s">Fale com o assistente IA</div></div><i class="ti ti-chevron-right" style="margin-left:auto;color:#C8D8C0;font-size:18px"></i></div>
+      </div>
+      <div class="bbar"><button class="bt on" onclick="go('home')"><i class="ti ti-home"></i>Início</button><button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button><button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button><button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button></div>
+    </div>
+
+    <!-- FORM: DEPENDENTE -->
+    <div class="vw" id="vw-sol-dep">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('solicitar')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Incluir Dependente</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="info-box">📋 Preencha os dados do dependente. O RH confirmará em até <b>2 dias úteis</b>.</div>
+        <div class="f-grp"><label class="f-lbl">NOME COMPLETO</label><input class="f-inp" placeholder="Ex: João Pedro Silva"/></div>
+        <div class="f-grp"><label class="f-lbl">GRAU DE PARENTESCO</label><select class="f-sel"><option>Cônjuge</option><option>Filho(a)</option><option>Enteado(a)</option><option>Pai / Mãe</option></select></div>
+        <div class="f-grp"><label class="f-lbl">DATA DE NASCIMENTO</label><input class="f-inp" placeholder="DD/MM/AAAA"/></div>
+        <div class="f-grp"><label class="f-lbl">CPF DO DEPENDENTE</label><input class="f-inp" placeholder="000.000.000-00"/></div>
+        <button class="btn btn-g" onclick="go('sol-ok')"><i class="ti ti-send"></i> Enviar solicitação</button>
+        <button class="btn btn-o" onclick="go('solicitar')"><i class="ti ti-x"></i> Cancelar</button>
+      </div>
+    </div>
+
+    <!-- FORM: ROTA -->
+    <div class="vw" id="vw-sol-rota">
+      <div class="hdr slim"><div class="hdr-row"><button class="hdr-back" onclick="go('solicitar')"><i class="ti ti-arrow-left"></i></button><div class="hdr-title">Trocar Rota</div><button class="hdr-home" onclick="go('home')"><i class="ti ti-home"></i></button></div></div>
+      <div class="body">
+        <div class="info-box">🚌 Rota atual: <b>Rota 3 · Messejana</b>. Escolha a nova rota abaixo.</div>
+        <div class="sect">ESCOLHA A NOVA ROTA</div>
+        <div class="rota-c" onclick="selRota(this)"><div style="width:36px;height:36px;background:#E8F0F8;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#2D6494;flex-shrink:0">1</div><div><div class="rn">Rota 1 · Centro / Aldeota</div><div class="rs">Embarque: Av. Barão de Studart · 05h10</div></div></div>
+        <div class="rota-c" onclick="selRota(this)"><div style="width:36px;height:36px;background:#E8F0F8;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#2D6494;flex-shrink:0">2</div><div><div class="rn">Rota 2 · Bom Jardim / Granja Lisboa</div><div class="rs">Embarque: R. Vicente Leite · 05h00</div></div></div>
+        <div class="rota-c" onclick="selRota(this)"><div style="width:36px;height:36px;background:#E8F0F8;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#2D6494;flex-shrink:0">4</div><div><div class="rn">Rota 4 · Parangaba / Mondubim</div><div class="rs">Embarque: Pq. Genibaú · 05h05</div></div></div>
+        <div class="rota-c" onclick="selRota(this)"><div style="width:36px;height:36px;background:#E8F0F8;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#2D6494;flex-shrink:0">5</div><div><div class="rn">Rota 5 · Caucaia / Jurema</div><div class="rs">Embarque: Pça. do Caucaia · 04h50</div></div></div>
+        <button class="btn btn-g" style="margin-top:12px" onclick="go('sol-ok')"><i class="ti ti-send"></i> Confirmar troca de rota</button>
+        <button class="btn btn-o" onclick="go('solicitar')"><i class="ti ti-x"></i> Cancelar</button>
+      </div>
+    </div>
+
+    <!-- SUCESSO -->
+    <div class="vw" id="vw-sol-ok">
+      <div class="hdr slim"><div class="hdr-row"><div class="hdr-icon"><i class="ti ti-building-factory-2" style="font-size:16px;color:#fff"></i></div><div class="hdr-title">Solicitação enviada</div></div></div>
+      <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="success">
+          <span class="success-ico">✅</span>
+          <div class="success-t">Solicitação registrada!</div>
+          <div class="success-s">Sua solicitação foi enviada com sucesso ao setor pessoal da Cerbras.</div>
+          <div class="success-prot">#2026-004821</div>
+          <div class="success-s">Resposta em até <b>2 dias úteis</b>.</div>
+          <button class="btn btn-g" style="margin-top:14px" onclick="go('home')"><i class="ti ti-home"></i> Voltar ao início</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPORTE IA -->
+    <div class="vw" id="vw-suporte">
+      <div class="hdr slim">
+        <div class="hdr-row">
+          <button class="hdr-back" onclick="go('home')"><i class="ti ti-arrow-left"></i></button>
+          <div style="display:flex;align-items:center;gap:8px;flex:1;margin-left:8px">
+            <div style="width:30px;height:30px;background:rgba(255,255,255,.18);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px">🤖</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#fff">Assistente BenefiClear</div>
+              <div style="font-size:9.5px;color:rgba(255,255,255,.7)">● Online · IA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-body" id="chat-msgs">
+        <div class="bub bot">Olá, José! 👋 Sou a IA da Cerbras. Posso te ajudar com dúvidas sobre benefícios, holerite, solicitações e muito mais!</div>
+        <div class="chips">
+          <div class="chip" onclick="snd('Qual o saldo do meu VA?')">Saldo do VA</div>
+          <div class="chip" onclick="snd('Quando recebo a PLR?')">Quando é a PLR?</div>
+          <div class="chip" onclick="snd('Como usar meu plano de saúde?')">Usar plano saúde</div>
+        </div>
+      </div>
+      <div class="chat-in">
+        <input class="chat-inp" id="chat-inp" placeholder="Digite sua dúvida..." onkeydown="if(event.key==='Enter')sndI()"/>
+        <button class="chat-snd" onclick="sndI()"><i class="ti ti-send"></i></button>
+      </div>
+      <div class="bbar">
+        <button class="bt" onclick="go('home')"><i class="ti ti-home"></i>Início</button>
+        <button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button>
+        <button class="bt on"><i class="ti ti-message-circle-2"></i>Suporte IA<div class="bt-dot"></div></button>
+        <button class="bt" onclick="go('perfil')"><i class="ti ti-user"></i>Perfil</button>
+      </div>
+    </div>
+
+    <!-- PERFIL -->
+    <div class="vw" id="vw-perfil">
+      <div class="hdr slim"><div class="hdr-row"><div class="hdr-icon"><i class="ti ti-building-factory-2" style="font-size:16px;color:#fff"></i></div><div class="hdr-title">Meu Perfil</div><i class="ti ti-pencil" style="margin-left:auto;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer"></i></div></div>
+      <div class="body">
+        <div class="perf-hero">
+          <div class="perf-av">JS</div>
+          <div class="perf-n">José Silva</div>
+          <div class="perf-r">Aux. de Produção · Esmaltação · Turno A</div>
+          <span class="perf-mat">Matrícula 00089234</span>
+        </div>
+        <div class="perf-stats">
+          <div class="perf-stat"><div class="perf-sv">8</div><div class="perf-sl">benefícios</div></div>
+          <div class="perf-stat"><div class="perf-sv">1</div><div class="perf-sl">dependente</div></div>
+          <div class="perf-stat"><div class="perf-sv">2a</div><div class="perf-sl">na Cerbras</div></div>
+        </div>
+        <div class="sect">DADOS PESSOAIS</div>
+        <div class="perf-block">
+          <div class="perf-item"><div class="perf-i-ico" style="background:#E8F5FF">📧</div><div style="flex:1"><div class="perf-i-l">E-mail</div><div class="perf-i-v">jose.silva@cerbras.com</div></div><i class="ti ti-chevron-right" style="color:#C8D8C0"></i></div>
+          <div class="perf-item"><div class="perf-i-ico" style="background:#D4EDE0">📱</div><div style="flex:1"><div class="perf-i-l">Celular</div><div class="perf-i-v">(85) 9 9234-5678</div></div><i class="ti ti-chevron-right" style="color:#C8D8C0"></i></div>
+          <div class="perf-item"><div class="perf-i-ico" style="background:#FFF3E0">🆔</div><div style="flex:1"><div class="perf-i-l">CPF</div><div class="perf-i-v">123.***.***-89</div></div><i class="ti ti-chevron-right" style="color:#C8D8C0"></i></div>
+        </div>
+        <div class="sect">VÍNCULO</div>
+        <div class="perf-block">
+          <div class="perf-item"><div class="perf-i-ico" style="background:#E8F5EE">💼</div><div style="flex:1"><div class="perf-i-l">Cargo</div><div class="perf-i-v">Aux. de Produção</div></div></div>
+          <div class="perf-item"><div class="perf-i-ico" style="background:#EDE5F7">🏭</div><div style="flex:1"><div class="perf-i-l">Setor</div><div class="perf-i-v">Esmaltação</div></div></div>
+          <div class="perf-item"><div class="perf-i-ico" style="background:#DCEAFB">📅</div><div style="flex:1"><div class="perf-i-l">Admissão</div><div class="perf-i-v">14/03/2024</div></div></div>
+        </div>
+        <div class="sect">CONFIGURAÇÕES</div>
+        <div class="perf-block">
+          <div class="perf-item"><div class="perf-i-ico" style="background:#FFEEF2">🔔</div><div class="perf-i-lbl">Notificações push</div><div class="perf-tog" onclick="this.classList.toggle('off')"></div></div>
+          <div class="perf-item"><div class="perf-i-ico" style="background:#E8F5FF">📨</div><div class="perf-i-lbl">Alertas por SMS</div><div class="perf-tog off" onclick="this.classList.toggle('off')"></div></div>
+          <div class="perf-item"><div class="perf-i-ico" style="background:#FFF3E0">🔒</div><div class="perf-i-lbl">Segurança e PIN</div><i class="ti ti-chevron-right" style="color:#C8D8C0"></i></div>
+        </div>
+        <button class="perf-logout" onclick="go('login')"><i class="ti ti-logout"></i> Sair da conta</button>
+      </div>
+      <div class="bbar">
+        <button class="bt" onclick="go('home')"><i class="ti ti-home"></i>Início</button>
+        <button class="bt" onclick="go('folha')"><i class="ti ti-receipt"></i>Holerite</button>
+        <button class="bt" onclick="go('suporte')"><i class="ti ti-message-circle-2"></i>Suporte IA</button>
+        <button class="bt on"><i class="ti ti-user"></i>Perfil<div class="bt-dot"></div></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const vmap={
+  login:'vw-login',home:'vw-home',folha:'vw-folha',suporte:'vw-suporte',perfil:'vw-perfil',
+  solicitar:'vw-solicitar','sol-dep':'vw-sol-dep','sol-rota':'vw-sol-rota','sol-ok':'vw-sol-ok',
+  'sol-ok':'vw-sol-ok',
+  'd-fretado':'vw-d-fretado','d-refeito':'vw-d-refeito','d-saude':'vw-d-saude',
+  'd-odonto':'vw-d-odonto','d-va':'vw-d-va','d-plr':'vw-d-plr',
+  'd-insalub':'vw-d-insalub','d-desconto':'vw-d-desconto'
+};
+function go(k){
+  document.querySelectorAll('.vw').forEach(v=>v.classList.remove('on'));
+  const id=vmap[k]||('vw-'+k);
+  const el=document.getElementById(id);
+  if(el){el.classList.add('on');const b=el.querySelector('.body');if(b)b.scrollTop=0;}
+}
+function selRota(el){
+  document.querySelectorAll('.rota-c').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+const resps={
+  'qual o saldo do meu va?':'Seu VA (Ticket) está com <b>R$ 500,00</b> disponível, creditado em 01/06. Use em supermercados e padarias credenciadas!',
+  'quando recebo a plr?':'A PLR 2025 está prevista para <b>Abril/2026</b>. Com 92% das metas atingidas, a estimativa é de <b>1,8× seu salário</b>.',
+  'como usar meu plano de saúde?':'Sua carteirinha Hapvida (nº 00089234-001) é aceita em qualquer unidade credenciada Hapvida no Brasil. A mais próxima: <b>Hospital Hapvida Maracanaú</b>, R. Paracuru, 100.',
+};
+const fb='Entendi! 📋 Sua dúvida foi registrada. Um especialista do RH da Cerbras responderá em breve.';
+function snd(t){
+  const b=document.getElementById('chat-msgs');
+  const u=document.createElement('div');u.className='bub usr';u.textContent=t;b.appendChild(u);
+  setTimeout(()=>{
+    const a=document.createElement('div');a.className='bub bot';
+    a.innerHTML=resps[t.toLowerCase()]||fb;
+    b.appendChild(a);b.scrollTop=b.scrollHeight;
+  },500);
+  b.scrollTop=b.scrollHeight;
+}
+function sndI(){
+  const i=document.getElementById('chat-inp');
+  if(!i.value.trim())return;snd(i.value.trim());i.value='';
+}
+</script>
+</body>
+</html>
+
+    </textarea>
+
+  <textarea id="code-totem" style="display: none;">
+    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BenefiClear · Totem Cerbras</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#1A1A2E;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+
+.stage{display:flex;flex-direction:column;align-items:center;gap:0}
+
+/* Kiosk shell */
+.kiosk{width:440px;background:linear-gradient(180deg,#2A2A2A 0%,#1A1A1A 100%);border-radius:24px 24px 8px 8px;padding:12px 12px 0;box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05)}
+.kiosk-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 4px}
+.kiosk-cam{width:10px;height:10px;background:#333;border-radius:50%;border:2px solid #444}
+.kiosk-model{font-size:9px;color:#3A3A3A;letter-spacing:1px}
+.kiosk-led{width:8px;height:8px;background:#1A6840;border-radius:50%;box-shadow:0 0 6px #1A6840}
+
+.screen{width:100%;height:680px;background:#0A1410;border-radius:12px 12px 0 0;overflow:hidden;display:flex;flex-direction:column;position:relative}
+
+.stand-top{width:200px;height:12px;background:#222;border-radius:0 0 4px 4px;margin:0 auto}
+.stand-pole{width:40px;height:120px;background:linear-gradient(180deg,#2A2A2A,#1A1A1A);margin:0 auto;border-radius:0 0 4px 4px}
+.stand-base{width:240px;height:18px;background:linear-gradient(180deg,#222,#1A1A1A);border-radius:8px;margin:0 auto}
+
+/* All screens */
+.sc{display:none;flex-direction:column;height:100%;animation:fadeIn .2s ease}
+.sc.on{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Header bar */
+.hbar{background:#1A6840;padding:16px 20px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hbar-brand{display:flex;align-items:center;gap:10px}
+.hbar-icon{width:34px;height:34px;background:rgba(255,255,255,.2);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.hbar-n{font-size:16px;font-weight:700;color:#fff}
+.hbar-loc{font-size:9.5px;color:rgba(255,255,255,.65);letter-spacing:.6px;text-align:right;line-height:1.5}
+.hbar-back{width:38px;height:38px;background:rgba(255,255,255,.15);border:none;border-radius:9px;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px}
+.hbar-back:hover{background:rgba(255,255,255,.25)}
+.hbar-title{font-size:16px;font-weight:700;color:#fff;flex:1;margin-left:10px}
+.hbar-home{width:34px;height:34px;background:rgba(255,255,255,.15);border:none;border-radius:8px;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* Body */
+.body{flex:1;overflow-y:auto;padding:20px}
+.body::-webkit-scrollbar{width:4px}
+.body::-webkit-scrollbar-track{background:transparent}
+.body::-webkit-scrollbar-thumb{background:#1A3A28;border-radius:4px}
+
+/* Footer */
+.foot{padding:12px 20px;border-top:1px solid #0F2A1A;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.foot-time{font-size:11px;color:#2A5A38}
+.foot-logout{background:none;border:1.5px solid #2A1A1A;color:#FF6B6B;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer}
+.foot-logout:hover{background:#1A0A0A}
+
+/* ===== LOGIN ===== */
+.login-greet{text-align:center;margin-bottom:24px}
+.login-greet .ico{font-size:48px;margin-bottom:12px;display:block}
+.login-greet h2{font-size:24px;font-weight:700;color:#fff;margin-bottom:6px}
+.login-greet p{font-size:13px;color:#3A6A50;line-height:1.5}
+.mat-field{background:#0F2A1A;border:2px solid #1A3A28;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:12px;margin-bottom:18px;transition:border-color .2s}
+.mat-field.err{border-color:#8A2A1A;background:#1A0A0A}
+.mat-num{flex:1;font-size:28px;font-weight:700;color:#fff;letter-spacing:8px;font-family:'Courier New',monospace;min-height:36px}
+.mat-del{background:none;border:none;color:#3A6A50;font-size:16px;cursor:pointer;padding:4px}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.key{background:#0F2A1A;border:2px solid #1A3A28;color:#fff;font-size:28px;font-weight:700;padding:18px;border-radius:12px;cursor:pointer;text-align:center;transition:all .12s;user-select:none}
+.key:hover{background:#152E1E;border-color:#2A4A38;transform:scale(.97)}
+.key:active{transform:scale(.94)}
+.key.zero{grid-column:2}
+.key.action{background:#0F2218;border-color:#1A3228;color:#3A6A50;font-size:16px}
+.btn-enter{width:100%;padding:18px;background:#1A6840;border:none;color:#fff;font-size:18px;font-weight:700;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.5px;transition:all .15s}
+.btn-enter:hover{background:#1E7848;transform:translateY(-1px)}
+.login-clock{text-align:center;color:#1E4A30;font-size:11.5px;margin-top:14px}
+
+/* ===== HOME ===== */
+.welcome-bar{background:#0F2A1A;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.w-av{width:48px;height:48px;border-radius:50%;background:#1A6840;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0}
+.w-name{font-size:18px;font-weight:700;color:#fff}
+.w-role{font-size:11.5px;color:#3A6A50;margin-top:2px}
+.w-tags{display:flex;gap:6px;margin-top:6px}
+.w-tag{padding:3px 10px;border-radius:14px;font-size:10px;font-weight:600}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mbtn{background:#0F2A1A;border:2px solid #1A3A28;border-radius:16px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .18s;width:100%}
+.mbtn:hover{border-color:#1A6840;background:#112A1A;transform:translateY(-2px)}
+.mbtn:active{transform:translateY(0);opacity:.85}
+.mbtn.green{background:#1A6840;border-color:#2A8850}
+.mbtn.green:hover{background:#1E7848}
+.mbtn .mico{font-size:38px;display:block;margin-bottom:10px}
+.mbtn .mlbl{font-size:16px;font-weight:700;color:#fff;display:block}
+.mbtn .msub{font-size:11px;color:#3A6A50;display:block;margin-top:4px}
+.mbtn.green .msub{color:rgba(255,255,255,.65)}
+
+/* ===== BENEFICIOS LIST ===== */
+.ben-title{font-size:13px;color:#3A6A50;letter-spacing:.5px;margin-bottom:14px}
+.ben-card{background:#0F2A1A;border:2px solid #1A3A28;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;cursor:pointer;transition:all .15s}
+.ben-card:hover{border-color:#1A6840;background:#112A1A;transform:translateX(4px)}
+.ben-card:active{transform:translateX(2px)}
+.ben-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ben-info{flex:1;min-width:0}
+.ben-n{font-size:15px;font-weight:600;color:#fff}
+.ben-s{font-size:11.5px;color:#3A6A50;margin-top:3px}
+.ben-pill{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
+.ben-arr{color:#1A4A2A;font-size:20px}
+
+/* ===== DETAIL ===== */
+.det-head{background:#0F2A1A;border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.det-h-ico{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.det-h-n{font-size:18px;font-weight:700;color:#fff}
+.det-h-s{font-size:12px;color:#3A6A50;margin-top:3px}
+.det-rows{background:#0F2A1A;border-radius:14px;overflow:hidden;margin-bottom:14px}
+.det-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #0A1E14;font-size:14px}
+.det-row:last-child{border-bottom:none}
+.det-rl{color:#3A6A50}
+.det-rv{color:#fff;font-weight:600;text-align:right;max-width:55%}
+.pill-ok{background:#1A6840;color:#4CE880;padding:3px 12px;border-radius:10px;font-size:11px;font-weight:600}
+.info-box{background:#0F2218;border:1.5px solid #1A4A28;border-radius:12px;padding:12px 14px;font-size:12.5px;color:#3A7A50;line-height:1.6;margin-bottom:14px}
+.info-box b{color:#4CB870;font-weight:600}
+.btn-action{width:100%;padding:16px;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;transition:all .15s}
+.btn-action:hover{transform:translateY(-2px)}
+.btn-green{background:#1A6840;color:#fff}
+.btn-outline{background:transparent;border:2px solid #1A3A28;color:#3A6A50}
+.btn-outline:hover{border-color:#1A6840;color:#fff;background:#112A1A}
+
+/* ===== HOLERITE ===== */
+.hol-header{background:#0F2A1A;border-radius:14px;padding:14px 16px;margin-bottom:14px;text-align:center}
+.hol-hero{background:linear-gradient(135deg,#1A6840,#2E9960);border-radius:14px;padding:18px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden}
+.hol-hero::after{content:'💰';position:absolute;right:-10px;bottom:-10px;font-size:80px;opacity:.1}
+.hol-hero-l{font-size:11px;color:rgba(255,255,255,.75);letter-spacing:.5px;margin-bottom:4px}
+.hol-hero-v{font-size:32px;font-weight:700;color:#fff;letter-spacing:-1px}
+.hol-hero-t{background:rgba(255,255,255,.18);display:inline-block;padding:3px 12px;border-radius:10px;font-size:11px;color:#fff;margin-top:8px}
+.hol-group{background:#0F2A1A;border-radius:14px;overflow:hidden;margin-bottom:10px}
+.hol-gh{padding:10px 16px;font-size:11px;font-weight:600;letter-spacing:.4px;border-bottom:1px solid #0A1E14}
+.hol-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid #0A1E14;font-size:13px}
+.hol-row:last-child{border-bottom:none}
+.hol-rl{color:#3A6A50;display:flex;align-items:center;gap:7px}
+.hol-rv-pos{color:#4CE880;font-weight:600}
+.hol-rv-neg{color:#FF8080;font-weight:600}
+.hol-tag{background:#1A3A28;color:#3A7A50;font-size:9px;padding:1px 6px;border-radius:5px;font-weight:600}
+.hol-tot{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#0F2218;border-radius:14px;font-size:15px;font-weight:700;color:#fff;margin-bottom:14px}
+.hol-tot-v{font-size:22px;color:#4CE880}
+
+/* ===== SOLICITAR ===== */
+.sol-title{font-size:13px;color:#3A6A50;letter-spacing:.5px;margin-bottom:14px}
+.sol-opt{background:#0F2A1A;border:2px solid #1A3A28;border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;cursor:pointer;transition:all .15s}
+.sol-opt:hover{border-color:#1A6840;background:#112A1A;transform:translateX(4px)}
+.sol-opt-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.sol-opt-n{font-size:15px;font-weight:600;color:#fff}
+.sol-opt-s{font-size:11.5px;color:#3A6A50;margin-top:3px}
+
+/* ===== FORMS ===== */
+.form-group{margin-bottom:16px}
+.form-lbl{font-size:12px;color:#3A6A50;letter-spacing:.4px;margin-bottom:7px;display:block}
+.form-inp{width:100%;background:#0F2A1A;border:2px solid #1A3A28;border-radius:12px;padding:14px 16px;font-size:16px;color:#fff;outline:none;transition:border-color .2s}
+.form-inp:focus{border-color:#1A6840}
+.form-sel{width:100%;background:#0F2A1A;border:2px solid #1A3A28;border-radius:12px;padding:14px 16px;font-size:15px;color:#fff;outline:none;appearance:none}
+.form-sel option{background:#0F2A1A}
+.rota-card{background:#0F2A1A;border:2px solid #1A3A28;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.rota-card:hover{border-color:#1A6840}
+.rota-card.sel{border-color:#1A6840;background:#112A1A}
+.rota-card.sel .rc-n{color:#4CE880}
+.rc-num{width:38px;height:38px;background:#1A3A28;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.rc-n{font-size:14px;font-weight:600;color:#fff}
+.rc-s{font-size:11px;color:#3A6A50;margin-top:2px}
+.success-screen{text-align:center;padding:30px 20px}
+.success-ico{font-size:64px;margin-bottom:16px;display:block}
+.success-t{font-size:22px;font-weight:700;color:#4CE880;margin-bottom:8px}
+.success-s{font-size:13px;color:#3A6A50;line-height:1.6;margin-bottom:24px}
+
+/* ===== IA CHAT ===== */
+.chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.bub{max-width:82%;padding:12px 14px;font-size:13.5px;line-height:1.5}
+.bub.bot{background:#0F2A1A;border:1.5px solid #1A3A28;border-radius:4px 16px 16px 16px;color:#B0D8B8;align-self:flex-start}
+.bub.usr{background:#1A6840;color:#fff;border-radius:16px 4px 16px 16px;align-self:flex-end}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip{padding:8px 14px;border:1.5px solid #1A3A28;border-radius:20px;font-size:12px;color:#3A7A50;cursor:pointer;background:#0F2A1A;transition:all .15s}
+.chip:hover{border-color:#1A6840;color:#4CB870;background:#112A1A}
+.chat-in{background:#0A1410;border-top:1px solid #0F2A1A;padding:12px 16px;display:flex;gap:10px;align-items:center;flex-shrink:0}
+.chat-inp{flex:1;background:#0F2A1A;border:2px solid #1A3A28;border-radius:24px;padding:12px 18px;font-size:14px;color:#fff;outline:none}
+.chat-inp::placeholder{color:#1E4A30}
+.chat-inp:focus{border-color:#1A6840}
+.chat-snd{width:44px;height:44px;background:#1A6840;border:none;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="kiosk">
+    <div class="kiosk-top">
+      <div class="kiosk-cam"></div>
+      <div class="kiosk-model">BENEFICLEAR KIOSK v2 · CERBRAS</div>
+      <div class="kiosk-led"></div>
+    </div>
+    <div class="screen">
+
+      <!-- LOGIN -->
+      <div class="sc on" id="sc-login">
+        <div class="hbar">
+          <div class="hbar-brand">
+            <div class="hbar-icon"><i class="ti ti-building-factory-2" style="font-size:18px;color:#fff"></i></div>
+            <div class="hbar-n">BenefiClear</div>
+          </div>
+          <div class="hbar-loc">TOTEM DO REFEITÓRIO<br>CERBRAS · MARACANAÚ</div>
+        </div>
+        <div class="body" style="padding:20px 24px">
+          <div class="login-greet">
+            <span class="ico">👋</span>
+            <h2>Olá, colaborador!</h2>
+            <p>Digite sua matrícula para acessar<br>seus benefícios e holerite</p>
+          </div>
+          <div class="mat-field" id="mat-field">
+            <div class="mat-num" id="mat-display">_ _ _ _ _ _ _ _</div>
+            <button class="mat-del" onclick="tClear()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="numpad">
+            <button class="key" onclick="tNum('1')">1</button>
+            <button class="key" onclick="tNum('2')">2</button>
+            <button class="key" onclick="tNum('3')">3</button>
+            <button class="key" onclick="tNum('4')">4</button>
+            <button class="key" onclick="tNum('5')">5</button>
+            <button class="key" onclick="tNum('6')">6</button>
+            <button class="key" onclick="tNum('7')">7</button>
+            <button class="key" onclick="tNum('8')">8</button>
+            <button class="key" onclick="tNum('9')">9</button>
+            <button class="key action" onclick="tDel()"><i class="ti ti-backspace"></i></button>
+            <button class="key zero" onclick="tNum('0')">0</button>
+            <button class="key action" onclick="tClear()"><i class="ti ti-x"></i></button>
+          </div>
+          <button class="btn-enter" onclick="tLogin()"><i class="ti ti-arrow-right"></i> ACESSAR MEUS BENEFÍCIOS</button>
+          <div class="login-clock">⏰ Turno A · 06h00 – 14h00 &nbsp;|&nbsp; Qua, 03/06/2026 &nbsp;|&nbsp; 07:42</div>
+        </div>
+      </div>
+
+      <!-- HOME -->
+      <div class="sc" id="sc-home">
+        <div class="hbar">
+          <div class="hbar-brand">
+            <div class="hbar-icon"><i class="ti ti-building-factory-2" style="font-size:18px;color:#fff"></i></div>
+            <div class="hbar-n">BenefiClear</div>
+          </div>
+          <div class="hbar-loc">CERBRAS · MARACANAÚ</div>
+        </div>
+        <div class="body">
+          <div class="welcome-bar">
+            <div class="w-av">JS</div>
+            <div>
+              <div class="w-name">José Silva</div>
+              <div class="w-role">Aux. de Produção · Setor Esmaltação</div>
+              <div class="w-tags">
+                <span class="w-tag" style="background:#1A3A28;color:#4CB870">Matrícula 00089234</span>
+                <span class="w-tag" style="background:#2A2A1A;color:#CCAA00">Turno A</span>
+              </div>
+            </div>
+          </div>
+          <div class="menu-grid">
+            <button class="mbtn green" onclick="go('sc-beneficios')">
+              <span class="mico">🎁</span>
+              <span class="mlbl">Meus Benefícios</span>
+              <span class="msub">8 ativos</span>
+            </button>
+            <button class="mbtn" onclick="go('sc-holerite')">
+              <span class="mico">💰</span>
+              <span class="mlbl">Meu Holerite</span>
+              <span class="msub">Maio · 2026</span>
+            </button>
+            <button class="mbtn" onclick="go('sc-solicitar')">
+              <span class="mico">📝</span>
+              <span class="mlbl">Solicitar</span>
+              <span class="msub">Dependente, rota...</span>
+            </button>
+            <button class="mbtn" onclick="go('sc-ia')">
+              <span class="mico">💬</span>
+              <span class="mlbl">Falar com RH</span>
+              <span class="msub">Assistente IA</span>
+            </button>
+          </div>
+        </div>
+        <div class="foot">
+          <div class="foot-time">⏱ Sessão encerra em 2:00</div>
+          <button class="foot-logout" onclick="tLogout()">⬅ SAIR</button>
+        </div>
+      </div>
+
+      <!-- BENEFICIOS LIST -->
+      <div class="sc" id="sc-beneficios">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-home')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Meus Benefícios</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="ben-title">ATIVOS · 8 BENEFÍCIOS</div>
+          <div class="ben-card" onclick="go('sc-fretado')">
+            <div class="ben-ico" style="background:#1A2A3A">🚌</div>
+            <div class="ben-info"><div class="ben-n">Transporte Fretado</div><div class="ben-s">Rota 3 · Messejana · 05h15</div></div>
+            <span class="ben-pill" style="background:#1A3A28;color:#4CB870">Ativo</span>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="ben-card" onclick="go('sc-refeitorio')">
+            <div class="ben-ico" style="background:#2A1A0A">🍽️</div>
+            <div class="ben-info"><div class="ben-n">Refeitório</div><div class="ben-s">Refeição no local · gratuita</div></div>
+            <span class="ben-pill" style="background:#1A3A28;color:#4CB870">Ativo</span>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="ben-card" onclick="go('sc-saude')">
+            <div class="ben-ico" style="background:#2A0A1A">🏥</div>
+            <div class="ben-info"><div class="ben-n">Plano de Saúde</div><div class="ben-s">Hapvida · 1 dependente</div></div>
+            <span class="ben-pill" style="background:#1A3A28;color:#4CB870">Ativo</span>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="ben-card" onclick="go('sc-odonto')">
+            <div class="ben-ico" style="background:#0A1A2A">🦷</div>
+            <div class="ben-info"><div class="ben-n">Plano Odontológico</div><div class="ben-s">OdontoPrev Empresarial</div></div>
+            <span class="ben-pill" style="background:#1A3A28;color:#4CB870">Ativo</span>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="ben-card" onclick="go('sc-va')">
+            <div class="ben-ico" style="background:#1A0A2A">🛒</div>
+            <div class="ben-info"><div class="ben-n">Vale Alimentação</div><div class="ben-s">Ticket · R$ 500/mês</div></div>
+            <span class="ben-pill" style="background:#1A3A28;color:#4CB870">Ativo</span>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="ben-card" onclick="go('sc-plr')">
+            <div class="ben-ico" style="background:#2A2A0A">💰</div>
+            <div class="ben-info"><div class="ben-n">PLR</div><div class="ben-s">Participação nos Resultados · Anual</div></div>
+            <span class="ben-pill" style="background:#2A2A18;color:#CCAA00">Abr/26</span>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="ben-card" onclick="go('sc-insalub')">
+            <div class="ben-ico" style="background:#2A1A0A">⚠️</div>
+            <div class="ben-info"><div class="ben-n">Insalubridade</div><div class="ben-s">Grau Médio · 20% sobre salário</div></div>
+            <span class="ben-pill" style="background:#1A3A28;color:#4CB870">Ativo</span>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="ben-card" onclick="go('sc-desconto')">
+            <div class="ben-ico" style="background:#0A2A1A">🏺</div>
+            <div class="ben-info"><div class="ben-n">Desconto Cerbras</div><div class="ben-s">15% em produtos da fábrica</div></div>
+            <span class="ben-pill" style="background:#1A3A28;color:#4CB870">Ativo</span>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRETADO -->
+      <div class="sc" id="sc-fretado">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Transporte Fretado</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="det-head">
+            <div class="det-h-ico" style="background:#1A2A3A">🚌</div>
+            <div><div class="det-h-n">Rota 3 · Messejana</div><div class="det-h-s">Transporte fretado pela Cerbras</div></div>
+          </div>
+          <div class="det-rows">
+            <div class="det-row"><span class="det-rl">Status</span><span class="pill-ok">Ativo</span></div>
+            <div class="det-row"><span class="det-rl">Ponto de embarque</span><span class="det-rv">Av. Dedé Brasil, 1420</span></div>
+            <div class="det-row"><span class="det-rl">Horário ida</span><span class="det-rv">05h15</span></div>
+            <div class="det-row"><span class="det-rl">Horário volta</span><span class="det-rv">14h30</span></div>
+            <div class="det-row"><span class="det-rl">Custo para você</span><span class="det-rv">Gratuito</span></div>
+            <div class="det-row"><span class="det-rl">Vagas disponíveis</span><span class="det-rv">48 / 52</span></div>
+          </div>
+          <div class="info-box">💡 Para solicitar <b>troca de rota</b>, acesse o menu <b>Solicitar</b> e escolha "Trocar rota do fretado".</div>
+          <button class="btn-action btn-green" onclick="go('sc-sol-rota')"><i class="ti ti-repeat"></i> Solicitar troca de rota</button>
+          <button class="btn-action btn-outline" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i> Voltar</button>
+        </div>
+      </div>
+
+      <!-- REFEITORIO -->
+      <div class="sc" id="sc-refeitorio">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Refeitório</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="det-head">
+            <div class="det-h-ico" style="background:#2A1A0A">🍽️</div>
+            <div><div class="det-h-n">Refeição no Local</div><div class="det-h-s">Refeitório Cerbras · Bloco C</div></div>
+          </div>
+          <div class="det-rows">
+            <div class="det-row"><span class="det-rl">Status</span><span class="pill-ok">Ativo</span></div>
+            <div class="det-row"><span class="det-rl">Custo para você</span><span class="det-rv">Gratuito</span></div>
+            <div class="det-row"><span class="det-rl">Horário turno A</span><span class="det-rv">11h00 – 12h30</span></div>
+            <div class="det-row"><span class="det-rl">Horário turno B</span><span class="det-rv">18h30 – 20h00</span></div>
+            <div class="det-row"><span class="det-rl">Horário turno C</span><span class="det-rv">00h30 – 02h00</span></div>
+          </div>
+          <div class="info-box">🍛 <b>Cardápio de hoje:</b><br>Arroz, feijão, carne assada, frango grelhado, salada verde, suco de caju, sobremesa: pudim.</div>
+          <button class="btn-action btn-outline" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i> Voltar</button>
+        </div>
+      </div>
+
+      <!-- SAUDE -->
+      <div class="sc" id="sc-saude">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Plano de Saúde</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="det-head">
+            <div class="det-h-ico" style="background:#2A0A1A">🏥</div>
+            <div><div class="det-h-n">Hapvida NotreDame</div><div class="det-h-s">Plano Empresarial</div></div>
+          </div>
+          <div class="det-rows">
+            <div class="det-row"><span class="det-rl">Status</span><span class="pill-ok">Ativo</span></div>
+            <div class="det-row"><span class="det-rl">Cobertura</span><span class="det-rv">Nacional</span></div>
+            <div class="det-row"><span class="det-rl">Acomodação</span><span class="det-rv">Apartamento</span></div>
+            <div class="det-row"><span class="det-rl">Carteirinha</span><span class="det-rv">00089234-001</span></div>
+            <div class="det-row"><span class="det-rl">Dependentes</span><span class="det-rv">1 incluído</span></div>
+            <div class="det-row"><span class="det-rl">Sua contribuição</span><span class="det-rv">R$ 80,00/mês</span></div>
+          </div>
+          <div class="info-box">👶 <b>Dependente:</b> Maria Silva (cônjuge). Para incluir novo dependente, acesse <b>Solicitar</b>.</div>
+          <button class="btn-action btn-green" onclick="go('sc-sol-dep')"><i class="ti ti-user-plus"></i> Adicionar dependente</button>
+          <button class="btn-action btn-outline" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i> Voltar</button>
+        </div>
+      </div>
+
+      <!-- ODONTO -->
+      <div class="sc" id="sc-odonto">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Plano Odontológico</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="det-head">
+            <div class="det-h-ico" style="background:#0A1A2A">🦷</div>
+            <div><div class="det-h-n">OdontoPrev</div><div class="det-h-s">Plano Empresarial Plus</div></div>
+          </div>
+          <div class="det-rows">
+            <div class="det-row"><span class="det-rl">Status</span><span class="pill-ok">Ativo</span></div>
+            <div class="det-row"><span class="det-rl">Carteirinha</span><span class="det-rv">00089234-OD</span></div>
+            <div class="det-row"><span class="det-rl">Cobertura</span><span class="det-rv">Consulta, limpeza, RX</span></div>
+            <div class="det-row"><span class="det-rl">Dependentes</span><span class="det-rv">1 incluído</span></div>
+            <div class="det-row"><span class="det-rl">Sua contribuição</span><span class="det-rv">R$ 25,00/mês</span></div>
+          </div>
+          <div class="info-box">📍 Clínicas credenciadas próximas: <b>OdontoPrev Maracanaú</b> (R. Cel. Virgílio, 312) e <b>OdontoPrev Fortaleza Centro</b>.</div>
+          <button class="btn-action btn-outline" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i> Voltar</button>
+        </div>
+      </div>
+
+      <!-- VA -->
+      <div class="sc" id="sc-va">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Vale Alimentação</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="det-head">
+            <div class="det-h-ico" style="background:#1A0A2A">🛒</div>
+            <div><div class="det-h-n">Vale Alimentação</div><div class="det-h-s">Ticket · Uso em supermercados</div></div>
+          </div>
+          <div class="det-rows">
+            <div class="det-row"><span class="det-rl">Status</span><span class="pill-ok">Ativo</span></div>
+            <div class="det-row"><span class="det-rl">Valor mensal</span><span class="det-rv">R$ 500,00</span></div>
+            <div class="det-row"><span class="det-rl">Cartão</span><span class="det-rv">Ticket · **** 9934</span></div>
+            <div class="det-row"><span class="det-rl">Crédito todo dia</span><span class="det-rv">1º dia útil</span></div>
+            <div class="det-row"><span class="det-rl">Uso em</span><span class="det-rv">Supermercados, padarias</span></div>
+          </div>
+          <div class="info-box">⚠️ Não aceito em restaurantes — para alimentação fora do refeitório, use o VA em supermercados e padarias credenciadas.</div>
+          <button class="btn-action btn-outline" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i> Voltar</button>
+        </div>
+      </div>
+
+      <!-- PLR -->
+      <div class="sc" id="sc-plr">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">PLR · Participação nos Resultados</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="det-head">
+            <div class="det-h-ico" style="background:#2A2A0A">💰</div>
+            <div><div class="det-h-n">PLR 2026</div><div class="det-h-s">Participação nos Resultados · Anual</div></div>
+          </div>
+          <div class="det-rows">
+            <div class="det-row"><span class="det-rl">Status</span><span class="det-rv" style="color:#CCAA00">Aguardando apuração</span></div>
+            <div class="det-row"><span class="det-rl">Previsão de pagamento</span><span class="det-rv">Abril/2026</span></div>
+            <div class="det-row"><span class="det-rl">Elegibilidade</span><span class="det-rv" style="color:#4CE880">✓ Apto</span></div>
+            <div class="det-row"><span class="det-rl">Meta de produção</span><span class="det-rv">92% atingida</span></div>
+            <div class="det-row"><span class="det-rl">Estimativa atual</span><span class="det-rv">1.8× salário base</span></div>
+          </div>
+          <div class="info-box">📊 A apuração final acontece em <b>março/2026</b>. O valor exato depende das metas globais da Cerbras e do seu tempo de empresa.</div>
+          <button class="btn-action btn-outline" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i> Voltar</button>
+        </div>
+      </div>
+
+      <!-- INSALUBRIDADE -->
+      <div class="sc" id="sc-insalub">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Insalubridade</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="det-head">
+            <div class="det-h-ico" style="background:#2A1A0A">⚠️</div>
+            <div><div class="det-h-n">Adicional de Insalubridade</div><div class="det-h-s">Grau Médio · Laudo LTCAT/SESMT</div></div>
+          </div>
+          <div class="det-rows">
+            <div class="det-row"><span class="det-rl">Status</span><span class="pill-ok">Ativo</span></div>
+            <div class="det-row"><span class="det-rl">Grau</span><span class="det-rv">Médio (20%)</span></div>
+            <div class="det-row"><span class="det-rl">Base de cálculo</span><span class="det-rv">Salário mínimo</span></div>
+            <div class="det-row"><span class="det-rl">Valor atual</span><span class="det-rv">R$ 282,44/mês</span></div>
+            <div class="det-row"><span class="det-rl">Agente nocivo</span><span class="det-rv">Poeira de sílica</span></div>
+          </div>
+          <div class="info-box">📄 Laudo LTCAT emitido em <b>jan/2025</b>. Dúvidas sobre EPIs ou laudo, fale com o SESMT da Cerbras ou acesse o <b>Assistente IA</b>.</div>
+          <button class="btn-action btn-outline" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i> Voltar</button>
+        </div>
+      </div>
+
+      <!-- DESCONTO CERBRAS -->
+      <div class="sc" id="sc-desconto">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Desconto Cerbras</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="det-head">
+            <div class="det-h-ico" style="background:#0A2A1A">🏺</div>
+            <div><div class="det-h-n">Desconto para Colaboradores</div><div class="det-h-s">15% em produtos Cerbras</div></div>
+          </div>
+          <div class="det-rows">
+            <div class="det-row"><span class="det-rl">Status</span><span class="pill-ok">Ativo</span></div>
+            <div class="det-row"><span class="det-rl">Desconto</span><span class="det-rv">15% sobre o preço de fábrica</span></div>
+            <div class="det-row"><span class="det-rl">Linha disponível</span><span class="det-rv">Pisos, azulejos, porcelanatos</span></div>
+            <div class="det-row"><span class="det-rl">Como usar</span><span class="det-rv">Apresentar matrícula na loja</span></div>
+          </div>
+          <div class="info-box">🏪 Disponível na <b>loja de fábrica</b> (Bloco A) das 12h às 17h de segunda a sexta.</div>
+          <button class="btn-action btn-outline" onclick="go('sc-beneficios')"><i class="ti ti-arrow-left"></i> Voltar</button>
+        </div>
+      </div>
+
+      <!-- HOLERITE -->
+      <div class="sc" id="sc-holerite">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-home')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Meu Holerite</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="hol-header" style="background:#0F2A1A;border-radius:12px;padding:12px 16px">
+            <div style="font-size:11px;color:#3A6A50;margin-bottom:4px;letter-spacing:.5px">COMPETÊNCIA</div>
+            <div style="font-size:18px;font-weight:700;color:#fff">Maio · 2026</div>
+            <div style="font-size:11px;color:#3A6A50;margin-top:2px">José Silva · Matrícula 00089234</div>
+          </div>
+          <div style="height:14px"></div>
+          <div class="hol-hero">
+            <div class="hol-hero-l">SALÁRIO LÍQUIDO</div>
+            <div class="hol-hero-v">R$ 3.820,00</div>
+            <div class="hol-hero-t">📈 +R$ 94 vs Abril</div>
+          </div>
+          <div class="hol-group">
+            <div class="hol-gh" style="color:#4CE880;background:#0F2218">+ PROVENTOS · R$ 5.114,44</div>
+            <div class="hol-row"><span class="hol-rl">💼 Salário base</span><span class="hol-rv-pos">R$ 2.412,00</span></div>
+            <div class="hol-row"><span class="hol-rl">⚠️ Insalubridade <span class="hol-tag">benefício</span></span><span class="hol-rv-pos">R$ 282,44</span></div>
+            <div class="hol-row"><span class="hol-rl">🛒 Vale Alimentação <span class="hol-tag">benefício</span></span><span class="hol-rv-pos">R$ 500,00</span></div>
+            <div class="hol-row"><span class="hol-rl">🕐 Horas extras (8h)</span><span class="hol-rv-pos">R$ 120,00</span></div>
+          </div>
+          <div class="hol-group">
+            <div class="hol-gh" style="color:#FF8080;background:#1A0A0A">− DESCONTOS · R$ 1.294,00</div>
+            <div class="hol-row"><span class="hol-rl">🏛️ INSS</span><span class="hol-rv-neg">− R$ 266,00</span></div>
+            <div class="hol-row"><span class="hol-rl">📋 IRRF</span><span class="hol-rv-neg">− R$ 0,00</span></div>
+            <div class="hol-row"><span class="hol-rl">🏥 Plano Saúde <span class="hol-tag">benefício</span></span><span class="hol-rv-neg">− R$ 80,00</span></div>
+            <div class="hol-row"><span class="hol-rl">🦷 Odonto <span class="hol-tag">benefício</span></span><span class="hol-rv-neg">− R$ 25,00</span></div>
+          </div>
+          <div class="hol-tot">
+            <span>VALOR LÍQUIDO</span>
+            <span class="hol-tot-v">R$ 3.820,00</span>
+          </div>
+          <button class="btn-action btn-outline" onclick="go('sc-home')"><i class="ti ti-home"></i> Voltar ao menu</button>
+        </div>
+      </div>
+
+      <!-- SOLICITAR -->
+      <div class="sc" id="sc-solicitar">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-home')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Solicitar</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="sol-title">O QUE VOCÊ PRECISA?</div>
+          <div class="sol-opt" onclick="go('sc-sol-dep')">
+            <div class="sol-opt-ico" style="background:#2A0A1A">👶</div>
+            <div><div class="sol-opt-n">Incluir dependente</div><div class="sol-opt-s">Adicionar familiar ao plano de saúde</div></div>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="sol-opt" onclick="go('sc-sol-rota')">
+            <div class="sol-opt-ico" style="background:#1A2A3A">🚌</div>
+            <div><div class="sol-opt-n">Trocar rota do fretado</div><div class="sol-opt-s">Mudar ponto de embarque ou rota</div></div>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="sol-opt" onclick="go('sc-ia')">
+            <div class="sol-opt-ico" style="background:#0A1A2A">📄</div>
+            <div><div class="sol-opt-n">2ª via de carteirinha</div><div class="sol-opt-s">Plano de saúde ou odonto</div></div>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+          <div class="sol-opt" onclick="go('sc-ia')">
+            <div class="sol-opt-ico" style="background:#1A2A1A">❓</div>
+            <div><div class="sol-opt-n">Outra solicitação</div><div class="sol-opt-s">Fale com o assistente IA</div></div>
+            <div class="ben-arr"><i class="ti ti-chevron-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOL: DEPENDENTE -->
+      <div class="sc" id="sc-sol-dep">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-solicitar')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Incluir Dependente</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div class="info-box" style="margin-bottom:18px">📋 Preencha os dados do dependente. Seu RH receberá a solicitação e confirmará em até <b>2 dias úteis</b>.</div>
+          <div class="form-group">
+            <label class="form-lbl">NOME COMPLETO DO DEPENDENTE</label>
+            <input class="form-inp" type="text" placeholder="Ex: João Pedro Silva" />
+          </div>
+          <div class="form-group">
+            <label class="form-lbl">GRAU DE PARENTESCO</label>
+            <select class="form-sel">
+              <option>Cônjuge</option>
+              <option>Filho(a)</option>
+              <option>Enteado(a)</option>
+              <option>Pai / Mãe</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-lbl">DATA DE NASCIMENTO</label>
+            <input class="form-inp" type="text" placeholder="DD/MM/AAAA" />
+          </div>
+          <div class="form-group">
+            <label class="form-lbl">CPF DO DEPENDENTE</label>
+            <input class="form-inp" type="text" placeholder="000.000.000-00" />
+          </div>
+          <button class="btn-action btn-green" onclick="go('sc-sol-ok')"><i class="ti ti-send"></i> Enviar solicitação</button>
+          <button class="btn-action btn-outline" onclick="go('sc-solicitar')"><i class="ti ti-arrow-left"></i> Cancelar</button>
+        </div>
+      </div>
+
+      <!-- SOL: ROTA -->
+      <div class="sc" id="sc-sol-rota">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-solicitar')"><i class="ti ti-arrow-left"></i></button>
+          <div class="hbar-title">Trocar Rota do Fretado</div>
+          <button class="hbar-home" onclick="go('sc-home')"><i class="ti ti-home"></i></button>
+        </div>
+        <div class="body">
+          <div style="font-size:12px;color:#3A6A50;margin-bottom:10px">ROTA ATUAL: <strong style="color:#CCAA00">Rota 3 · Messejana</strong></div>
+          <div style="font-size:13px;color:#3A6A50;letter-spacing:.5px;margin-bottom:12px">ESCOLHA A NOVA ROTA</div>
+          <div class="rota-card" onclick="selectRota(this)">
+            <div class="rc-num">1</div>
+            <div><div class="rc-n">Rota 1 · Centro / Aldeota</div><div class="rc-s">Embarque: Av. Barão de Studart · 05h10</div></div>
+          </div>
+          <div class="rota-card" onclick="selectRota(this)">
+            <div class="rc-num">2</div>
+            <div><div class="rc-n">Rota 2 · Bom Jardim / Granja Lisboa</div><div class="rc-s">Embarque: R. Vicente Leite · 05h00</div></div>
+          </div>
+          <div class="rota-card" onclick="selectRota(this)">
+            <div class="rc-num">4</div>
+            <div><div class="rc-n">Rota 4 · Parangaba / Mondubim</div><div class="rc-s">Embarque: Pq. Genibaú · 05h05</div></div>
+          </div>
+          <div class="rota-card" onclick="selectRota(this)">
+            <div class="rc-num">5</div>
+            <div><div class="rc-n">Rota 5 · Caucaia / Jurema</div><div class="rc-s">Embarque: Pça. do Caucaia · 04h50</div></div>
+          </div>
+          <button class="btn-action btn-green" id="btn-rota" style="margin-top:14px" onclick="go('sc-sol-ok')"><i class="ti ti-send"></i> Confirmar troca</button>
+          <button class="btn-action btn-outline" onclick="go('sc-solicitar')"><i class="ti ti-arrow-left"></i> Cancelar</button>
+        </div>
+      </div>
+
+      <!-- SUCESSO -->
+      <div class="sc" id="sc-sol-ok">
+        <div class="hbar">
+          <div class="hbar-brand">
+            <div class="hbar-icon"><i class="ti ti-building-factory-2" style="font-size:18px;color:#fff"></i></div>
+            <div class="hbar-n">BenefiClear</div>
+          </div>
+          <div class="hbar-loc">CERBRAS · MARACANAÚ</div>
+        </div>
+        <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+          <div class="success-screen">
+            <span class="success-ico">✅</span>
+            <div class="success-t">Solicitação enviada!</div>
+            <div class="success-s">Sua solicitação foi registrada com sucesso e encaminhada ao setor pessoal.<br><br>Você receberá uma confirmação em até <strong style="color:#4CB870">2 dias úteis</strong>.<br><br>Número do protocolo: <strong style="color:#4CB870">#2026-004821</strong></div>
+            <button class="btn-action btn-green" style="max-width:280px;margin:0 auto" onclick="go('sc-home')"><i class="ti ti-home"></i> Voltar ao menu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- IA CHAT -->
+      <div class="sc" id="sc-ia">
+        <div class="hbar">
+          <button class="hbar-back" onclick="go('sc-home')"><i class="ti ti-arrow-left"></i></button>
+          <div style="display:flex;align-items:center;gap:8px;flex:1;margin-left:10px">
+            <div style="width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px">🤖</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#fff">Assistente IA</div>
+              <div style="font-size:9.5px;color:rgba(255,255,255,.6)">● Online agora</div>
+            </div>
+          </div>
+        </div>
+        <div class="chat-body" id="chat-msgs">
+          <div class="bub bot">Olá, José! 👋 Sou o assistente IA da Cerbras. Posso te ajudar com dúvidas sobre seus benefícios, holerite, solicitações e mais. Como posso ajudar?</div>
+          <div class="chips">
+            <div class="chip" onclick="sendMsg('Qual o saldo do meu VA?')">Saldo do VA</div>
+            <div class="chip" onclick="sendMsg('Onde usar minha carteirinha?')">Usar carteirinha</div>
+            <div class="chip" onclick="sendMsg('Quando recebo a PLR?')">Quando recebo PLR?</div>
+          </div>
+        </div>
+        <div class="chat-in">
+          <input class="chat-inp" id="chat-inp" placeholder="Digite sua dúvida..." onkeydown="if(event.key==='Enter')sendFromInput()"/>
+          <button class="chat-snd" onclick="sendFromInput()"><i class="ti ti-send"></i></button>
+        </div>
+      </div>
+
+    </div><!-- /screen -->
+  </div><!-- /kiosk -->
+  <div class="stand-top"></div>
+  <div class="stand-pole"></div>
+  <div class="stand-base"></div>
+</div>
+
+<script>
+function go(id){
+  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  // scroll to top
+  const b=document.getElementById(id).querySelector('.body');
+  if(b) b.scrollTop=0;
+}
+// Numpad
+let mat='';
+function tNum(n){if(mat.length<8){mat+=n;upd();}}
+function tDel(){mat=mat.slice(0,-1);upd();}
+function tClear(){mat='';upd();}
+function upd(){
+  const s=mat.padEnd(8,'_').split('').join(' ');
+  document.getElementById('mat-display').textContent=s;
+  document.getElementById('mat-field').classList.remove('err');
+}
+function tLogin(){
+  if(mat.length>=6) go('sc-home');
+  else {
+    document.getElementById('mat-field').classList.add('err');
+    document.getElementById('mat-display').textContent='INVÁLIDA!';
+    setTimeout(()=>{mat='';upd();},1200);
+  }
+}
+function tLogout(){mat='';upd();go('sc-login');}
+
+// Rota select
+function selectRota(el){
+  document.querySelectorAll('.rota-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// Chat
+const resps={
+  'qual o saldo do meu va?':'Seu VA (Ticket) está com saldo de <strong>R$ 500,00</strong>, creditado no dia 01/06. Lembre: use em supermercados e padarias credenciadas!',
+  'onde usar minha carteirinha?':'Sua carteirinha Hapvida (00089234-001) é aceita em qualquer clínica ou hospital credenciado pela Hapvida no Brasil. A mais próxima: Hospital Hapvida Maracanaú, R. Paracuru, 100.',
+  'quando recebo a plr?':'A PLR 2025 está prevista para <strong>Abril/2026</strong>. Com base nas metas atuais (92% atingidas), a estimativa é de <strong>1,8× seu salário base</strong>. O valor exato sai após a apuração em março.',
+};
+const fallback='Entendi! Vou verificar isso para você. 📋 Sua dúvida foi registrada e um especialista do RH responderá em breve, ou você pode solicitar pelo menu <strong>Solicitar</strong>.';
+function sendMsg(txt){
+  const b=document.getElementById('chat-msgs');
+  const u=document.createElement('div');u.className='bub usr';u.innerHTML=txt;b.appendChild(u);
+  setTimeout(()=>{
+    const a=document.createElement('div');a.className='bub bot';
+    a.innerHTML=resps[txt.toLowerCase()]||fallback;
+    b.appendChild(a);b.scrollTop=b.scrollHeight;
+  },500);
+  b.scrollTop=b.scrollHeight;
+}
+function sendFromInput(){
+  const i=document.getElementById('chat-inp');
+  if(!i.value.trim())return;
+  sendMsg(i.value.trim());i.value='';
+}
+</script>
+</body>
+</html>
+
+    </textarea>
+
+    <script>
+    function mudarTela(id, btnElement) {
+      try {
+        // 1. Atualiza a cor dos botões do menu superior
+        document.querySelectorAll('.btn-nav').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        // 2. Extrai o código bruto de dentro do textarea (sem perder a tag body!)
+        const rawHtml = document.getElementById('code-' + id).value;
+
+        // 3. Injeta diretamente no iframe
+        const iframe = document.getElementById('tela-viewer');
+        iframe.srcdoc = rawHtml;
+      } catch (e) {
+        console.error("Erro ao tentar mudar de tela: ", e);
+      }
+    }
+
+    // Carrega automaticamente a primeira tela ao abrir o arquivo
+    window.addEventListener('DOMContentLoaded', () => {
+      const btnPrimeiro = document.querySelector('.btn-nav');
+      if (btnPrimeiro) {
+        mudarTela('desktop', btnPrimeiro);
+      }
+    });
+  </script>
+
+</body>
+</html>
